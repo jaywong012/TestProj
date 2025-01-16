@@ -10,9 +10,9 @@ public static class SeedDatabase
         if (context.Products == null) return;
         context.Products.AddRange(new List<Product>
         {
-            new() {Id = Guid.Parse("A005FC52-5AE6-4400-4752-08DD2FB6F43A"), Name = "CoCa", Price = 20},
-            new() {Id = Guid.Parse("A005FC52-5AE6-4400-4752-08DD2FB6F43B"), Name = "Pepsi", Price = 50},
-            new() {Id = Guid.Parse("A005FC52-5AE6-4400-4752-08DD2FB6F43C"), Name = "Latte", Price = 120}
+            new() {Id = Guid.Parse("A005FC52-5AE6-4400-4752-08DD2FB6F43A"), Name = "CoCa", Price = 20, LastSavedTime = new DateTime()},
+            new() {Id = Guid.Parse("A005FC52-5AE6-4400-4752-08DD2FB6F43B"), Name = "Pepsi", Price = 50, LastSavedTime = new DateTime()},
+            new() {Id = Guid.Parse("A005FC52-5AE6-4400-4752-08DD2FB6F43C"), Name = "Latte", Price = 120, LastSavedTime = new DateTime()}
         });
         context.SaveChanges();
     }

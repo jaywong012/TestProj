@@ -5,7 +5,8 @@ const productSlice = createSlice({
     initialState:{
         products: [],
         totalPages: 0,
-        currentPage: 0
+        currentPage: 1,
+        searchKey: ""
     },
     reducers:{
         setProducts: (state, action) => {
@@ -16,9 +17,12 @@ const productSlice = createSlice({
         },
         setCurrentPage: (state, action) => {
             state.currentPage = action.payload;
+        },
+        setSearchKey: (state, action) => {
+            state.searchKey = action.payload
         }
     }
 });
 
-export const { setProducts, setPages, setCurrentPage } = productSlice.actions;
+export const { setProducts, setPages, setCurrentPage, setSearchKey } = productSlice.actions;
 export default productSlice.reducer;

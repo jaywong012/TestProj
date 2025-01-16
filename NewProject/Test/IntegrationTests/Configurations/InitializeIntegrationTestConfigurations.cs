@@ -8,9 +8,9 @@ namespace Test.IntegrationTests.Configurations;
 
 public class InitializeIntegrationTestConfigurationsModel
 {
-    public HttpClient Client { get; init; }
-    public NewProjectDbContext Context { get; init; }
-    public WebApplicationFactory<Program> Factory { get; init; }
+    public required HttpClient Client { get; init; }
+    public required NewProjectDbContext Context { get; init; }
+    public required WebApplicationFactory<Program> Factory { get; init; }
 
     public void Dispose()
     {

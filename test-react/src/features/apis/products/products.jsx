@@ -6,9 +6,18 @@ const productApiServices = {
     const response = await axiosInstance.get(endPoint.PRODUCT);
     return response;
   },
-  getProductsByPaging: async (index, size) => {
+  getProductsByPaging: async ({ searchKey, pageIndex, pageSize }) => {
+    const searchKeyParam = searchKey ? `searchKey=${searchKey}&` : "";
     const response = await axiosInstance.get(
-      `${endPoint.PRODUCT}/paged?pageIndex=${index}&pageSize=${size}`
+      `${endPoint.PRODUCT}/paged?${searchKeyParam}pageIndex=${pageIndex}&pageSize=${pageSize}`
+    );
+    return response;
+  },
+  downloadCsvFile: async (searchKey) => {
+    const searchKeyParam = searchKey ? `?searchKey=${searchKey}` : "";
+    const response = await axiosInstance.get(
+      `${endPoint.PRODUCT}/download-file${searchKeyParam}`,
+      { responseType: "blob" }
     );
     return response;
   },

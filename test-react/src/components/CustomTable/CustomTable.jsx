@@ -1,9 +1,10 @@
-import React, { useState, memo } from "react";
+import React, { memo } from "react";
 import CustomTitle from "../CustomTitle/CustomTitle";
 import SpinnerComponent from "../Spinner/Spinner";
-import { Table } from "react-bootstrap";
-import { Pencil, Trash } from "react-bootstrap-icons";
+import { Table, Form, Row, Col, Button } from "react-bootstrap";
+import { Download, Pencil, Trash } from "react-bootstrap-icons";
 import PaginationComponent from "../PaginationComponent/PaginationComponent";
+import "./CustomTable.scss";
 
 const CustomTable = ({
   title,
@@ -15,17 +16,49 @@ const CustomTable = ({
   loading,
   totalPages,
   fetchDataByPaging,
+  searchKey,
+  handleSearchChange,
+  currentPage,
+  setCurrentPage,
+  isSearchable = false,
+  handleDownloadFile,
 }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-
   const handlePageChange = (pageNumber) => {
-    if(pageNumber === currentPage) return;
+    if (pageNumber === currentPage) return;
     setCurrentPage(pageNumber);
     fetchDataByPaging(pageNumber);
   };
+  const placeholderCount = 10 - itemArray?.length;
+
   return (
     <>
-      <CustomTitle>{title}</CustomTitle>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 12,
+        }}
+      >
+        <CustomTitle>{title}</CustomTitle>
+        {handleDownloadFile && (
+          <Button onClick={() => handleDownloadFile()}>
+            <Download />
+          </Button>
+        )}
+      </div>
+      {isSearchable && (
+        <Form.Group as={Row} className="mb-3">
+          <Col sm="4">
+            <Form.Control
+              type="text"
+              placeholder="Search..."
+              value={searchKey}
+              onChange={handleSearchChange}
+            />
+          </Col>
+        </Form.Group>
+      )}
       {loading || !itemArray ? (
         <SpinnerComponent />
       ) : (
@@ -42,6 +75,17 @@ const CustomTable = ({
                   handleDelete={handleDelete}
                 />
               ))}
+              {placeholderCount > 0 &&
+                Array.from({ length: placeholderCount }).map((_, index) => (
+                  <tr
+                    key={`${placeholderCount}-${index}`}
+                    className="hidden-tr"
+                  >
+                    <td colSpan={headerArray.length + 1} className="hidden-td">
+                      &nbsp;
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </Table>
           {totalPages && (

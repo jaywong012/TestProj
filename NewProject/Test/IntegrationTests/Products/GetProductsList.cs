@@ -37,7 +37,7 @@ public class GetProductsList
         SeedDatabase.SeedProducts(_configurations.Context);
         var response = _configurations.Client.GetAsync("api/product").Result;
         var responseBody = response.Content.ReadAsStringAsync().Result;
-        var content = JsonSerializer.Deserialize<List<Product>>(responseBody);
+        var content = JsonSerializer.Deserialize<List<GetProductQueryResponse>>(responseBody);
         Assert.That(content, Is.Not.Null);
         if (content != null)
         {
@@ -51,7 +51,7 @@ public class GetProductsList
         SeedDatabase.SeedProducts(_configurations.Context);
         GetProductListByPagingQuery pageRequest = new()
         {
-            PageIndex = 1,
+            PageIndex = 2,
             PageSize = 2
         };
         var response = _configurations.Client.GetAsync($"api/Product/paged?pageIndex={pageRequest.PageIndex}&pageSize={pageRequest.PageSize}").Result;

@@ -12,7 +12,7 @@ import { defaultPageIndex, emptyGuid, pageSize } from "../../constants/common";
 const Product = () => {
   const defaultData = {
     productName: "",
-    productPrice: "",
+    productPrice: 0,
     productCategory: "",
   };
   const [formData, setFormData] = useState(defaultData);
@@ -23,6 +23,7 @@ const Product = () => {
   const products = useSelector((state) => state.product.products);
   const categories = useSelector((state) => state.category.categories);
   const currentPage = useSelector((state) => state.product.currentPage);
+  const searchKey = useSelector((state) => state.product.searchKey);
 
   useEffect(() => {
     getProducts();
@@ -32,7 +33,12 @@ const Product = () => {
   const getProducts = async () => {
     try {
       const pageIndex = currentPage ?? defaultPageIndex;
-      const result = await productApiServices.getProductsByPaging(pageIndex, pageSize);
+      const searchRequest = {
+        searchKey: searchKey,
+        pageIndex: pageIndex,
+        pageSize: pageSize
+      }
+      const result = await productApiServices.getProductsByPaging(searchRequest);
       dispatch(setProducts(result?.products));
       dispatch(setPages(result?.totalPages));
     } catch (error) {

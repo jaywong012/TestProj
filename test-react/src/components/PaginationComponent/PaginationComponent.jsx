@@ -1,3 +1,4 @@
+import { ellipsisDirection } from "@/constants/pagination";
 import React from "react";
 import { Pagination } from "react-bootstrap";
 
@@ -16,6 +17,14 @@ const PaginationComponent = ({ currentPage, totalPages, onPageChange }) => {
     pageNumbers.push(i);
   }
 
+  const handleEllipsisClick = (type) => {
+    if (type === ellipsisDirection.LEFT) {
+      onPageChange(Math.floor((1 + currentPage) / 2));
+    } else if (type === ellipsisDirection.RIGHT) {
+      onPageChange(Math.floor((currentPage + totalPages) / 2));
+    }
+  };
+
   return (
     <Pagination>
       <Pagination.Prev
@@ -24,7 +33,11 @@ const PaginationComponent = ({ currentPage, totalPages, onPageChange }) => {
       {startPage > 1 && (
         <>
           <Pagination.Item onClick={() => onPageChange(1)}>1</Pagination.Item>
-          {startPage > 2 && <Pagination.Ellipsis />}
+          {startPage > 2 && (
+            <Pagination.Ellipsis
+              onClick={() => handleEllipsisClick(ellipsisDirection.LEFT)}
+            />
+          )}
         </>
       )}
       {pageNumbers.map((number) => (
@@ -38,7 +51,11 @@ const PaginationComponent = ({ currentPage, totalPages, onPageChange }) => {
       ))}
       {endPage < totalPages && (
         <>
-          {endPage < totalPages - 1 && <Pagination.Ellipsis />}
+          {endPage < totalPages - 1 && (
+            <Pagination.Ellipsis
+              onClick={() => handleEllipsisClick(ellipsisDirection.RIGHT)}
+            />
+          )}
           <Pagination.Item onClick={() => onPageChange(totalPages)}>
             {totalPages}
           </Pagination.Item>
