@@ -1,0 +1,57 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+.text-overflow-ellipse {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+
+.container-fluid {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 10vh);
+  margin-top: 20px;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
+
+.mb-10{
+    margin-bottom: 10px;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-1{
+    flex: 1;
+}
+
+.g-20{
+    gap: 20px;
+}
+
+.blur {
+  color: #999;
+}
+
+.max-width-100 {
+  max-width: 100px;
+}
