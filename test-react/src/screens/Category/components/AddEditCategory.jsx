@@ -17,12 +17,13 @@ const AddEditCategory = ({
       <Form onSubmit={editId ? handleEdit : handleAdd}>
         <Form.Group as={Row} className="mb-3" controlId="categoryName">
           <Form.Label>Category Name</Form.Label>
-          <Col md={3}>
+          <Col md={4}>
             <Form.Control
               type="text"
               value={categoryName}
               onChange={handleInputChange}
               required
+              placeholder="Enter Category Name"
             />
           </Col>
         </Form.Group>

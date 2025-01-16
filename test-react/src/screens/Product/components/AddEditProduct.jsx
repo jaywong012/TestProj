@@ -36,6 +36,7 @@ const AddEditProduct = ({
                 ref={productNameRef}
                 type="text"
                 name="productName"
+                placeholder="Enter Product Name"
                 value={form.productName}
                 onChange={handleChange}
                 tabIndex={0}

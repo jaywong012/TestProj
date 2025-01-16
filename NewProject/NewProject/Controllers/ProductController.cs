@@ -1,7 +1,9 @@
-﻿using Application.Features.Products.Commands;
+﻿using System.Text;
+using Application.Features.Products.Commands;
 using Application.Features.Products.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace NewProject.APIs.Controllers;
 
@@ -41,6 +43,16 @@ public class ProductController : ControllerBase
     {
         var response = await _mediator.Send(request);
         return Ok(response);
+    }
+
+    [HttpGet("download-file")]
+    public async Task<IActionResult> DownloadCsv([FromQuery] GenerateCsvCommandRequest request)
+    {
+        var response = await _mediator.Send(request);
+        var byteArray = Encoding.UTF8.GetBytes(response);
+        var stream = new MemoryStream(byteArray);
+
+        return File(stream, "text/csv", "product.csv");
     }
 
     [HttpPost]

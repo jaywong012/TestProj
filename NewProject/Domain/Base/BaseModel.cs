@@ -9,9 +9,4 @@ public class BaseModel
     public DateTime LastCreatedTime { get; set; }
 
     public DateTime LastSavedTime { get; set; }
-
-    public string GetFormattedLastSavedTime()
-    {
-        return LastSavedTime.ToString("dd-MM HH:mm");
-    }
 }

@@ -38,7 +38,7 @@ public class UpdateProduct
         if (product != null)
         {
             product.Name = updatedName;
-            product.Price = updatedPrice;
+            product.Price = (int)updatedPrice;
             product.CategoryId = updatedCategoryId;
         }
 
