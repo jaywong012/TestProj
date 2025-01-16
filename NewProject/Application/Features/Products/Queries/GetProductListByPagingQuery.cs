@@ -6,8 +6,8 @@ namespace Application.Features.Products.Queries;
 
 public class GetProductListByPagingQuery : IRequest<PagedProductListResponse>
 {
-    public int PageIndex { get; set; }
-    public int PageSize { get; set; } = 10;
+    public int PageIndex { get; init; }
+    public int PageSize { get; init; } = 10;
 }
 
 public class GetProductListByPagingQueryHandler : IRequestHandler<GetProductListByPagingQuery, PagedProductListResponse>
@@ -20,18 +20,20 @@ public class GetProductListByPagingQueryHandler : IRequestHandler<GetProductList
 
     public Task<PagedProductListResponse> Handle(GetProductListByPagingQuery request, CancellationToken cancellationToken)
     {
-        var count = _unitOfWork
+        var productsCount = _unitOfWork
             .ProductRepository
             .GetAll()
             .Count();
-            
-        var totalPages = (int)Math.Ceiling(count / (decimal)request.PageSize);
+
+        var totalPages = (int)Math.Ceiling(productsCount / (decimal)request.PageSize);
+
+        var pageIndex = request.PageIndex > 0 ? request.PageIndex - 1 : 0;
 
         var pagedProducts= _unitOfWork
             .ProductRepository
             .GetAll()
             .OrderByDescending(o => o.LastSavedTime)  
-            .Skip(request.PageIndex * request.PageSize)
+            .Skip(pageIndex * request.PageSize)
             .Take(request.PageSize)
             .Select(p => new GetProductQueryResponse
             {
@@ -39,8 +41,8 @@ public class GetProductListByPagingQueryHandler : IRequestHandler<GetProductList
                 Name = p.Name,
                 CategoryId = p.CategoryId,
                 Price = p.Price,
-                //CategoryName = p.Category != null ? p.Category.Name : "",
-                CreatedTime = p.LastCreatedTime
+                CategoryName = p.Category != null ? p.Category.Name : "",
+                LastSavedTime = p.GetFormattedLastSavedTime()
             });
 
         PagedProductListResponse response = new()

@@ -1,8 +1,9 @@
-import React, { memo } from "react";
+import React, { useState, memo } from "react";
 import CustomTitle from "../CustomTitle/CustomTitle";
 import SpinnerComponent from "../Spinner/Spinner";
 import { Table } from "react-bootstrap";
 import { Pencil, Trash } from "react-bootstrap-icons";
+import PaginationComponent from "../PaginationComponent/PaginationComponent";
 
 const CustomTable = ({
   title,
@@ -12,27 +13,45 @@ const CustomTable = ({
   handleSetEditDetail,
   handleDelete,
   loading,
+  totalPages,
+  fetchDataByPaging,
 }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePageChange = (pageNumber) => {
+    if(pageNumber === currentPage) return;
+    setCurrentPage(pageNumber);
+    fetchDataByPaging(pageNumber);
+  };
   return (
     <>
       <CustomTitle>{title}</CustomTitle>
       {loading || !itemArray ? (
         <SpinnerComponent />
       ) : (
-        <Table striped bordered hover>
-          <HeaderComponent headerArray={headerArray} />
-          <tbody>
-            {itemArray.map((item) => (
-              <RowComponent
-                key={item.id}
-                item={item}
-                renderBodyRow={renderBodyRow}
-                handleSetEditDetail={handleSetEditDetail}
-                handleDelete={handleDelete}
-              />
-            ))}
-          </tbody>
-        </Table>
+        <>
+          <Table striped bordered hover>
+            <HeaderComponent headerArray={headerArray} />
+            <tbody>
+              {itemArray.map((item) => (
+                <RowComponent
+                  key={item.id}
+                  item={item}
+                  renderBodyRow={renderBodyRow}
+                  handleSetEditDetail={handleSetEditDetail}
+                  handleDelete={handleDelete}
+                />
+              ))}
+            </tbody>
+          </Table>
+          {totalPages && (
+            <PaginationComponent
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          )}
+        </>
       )}
     </>
   );

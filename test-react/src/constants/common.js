@@ -5,3 +5,7 @@ export const action = {
     EDIT: "EDIT",
     CANCEL: "CANCEL",
 }
+
+export const pageSize = 10;
+
+export const defaultPageIndex = 0;

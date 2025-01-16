@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Col, Form, Row } from "react-bootstrap";
 import CustomButton from "@/components/CustomButton/CustomButton";
@@ -13,6 +13,14 @@ const AddEditProduct = ({
   handleChange,
   form,
 }) => {
+  const productNameRef = useRef(null);
+
+  useEffect(() => {
+    if (editId) {
+      productNameRef.current?.focus();
+    }
+  }, [editId]);
+
   return (
     <div>
       <h3>Product</h3>
@@ -25,10 +33,12 @@ const AddEditProduct = ({
             <Form.Label>Product Name</Form.Label>
             <Col>
               <Form.Control
+                ref={productNameRef}
                 type="text"
                 name="productName"
                 value={form.productName}
                 onChange={handleChange}
+                tabIndex={0}
               />
             </Col>
           </Form.Group>
@@ -44,6 +54,7 @@ const AddEditProduct = ({
                 required
                 value={form.productPrice}
                 onChange={handleChange}
+                tabIndex={0}
               />
             </Col>
           </Form.Group>
@@ -59,6 +70,7 @@ const AddEditProduct = ({
                 value={form.productCategory}
                 onChange={handleChange}
                 name="productCategory"
+                tabIndex={0}
               >
                 <option value="" className="blur"></option>
                 {categories?.map((category) => (

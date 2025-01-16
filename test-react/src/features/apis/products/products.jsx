@@ -6,9 +6,9 @@ const productApiServices = {
     const response = await axiosInstance.get(endPoint.PRODUCT);
     return response;
   },
-  getProductsByPaging: async (page, size) => {
+  getProductsByPaging: async (index, size) => {
     const response = await axiosInstance.get(
-      `${endPoint.PRODUCT}/paged?page=${page}&size=${size}`
+      `${endPoint.PRODUCT}/paged?pageIndex=${index}&pageSize=${size}`
     );
     return response;
   },

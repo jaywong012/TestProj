@@ -28,7 +28,6 @@ public class ErrorHandlingMiddleware
 
             switch (ex)
             {
-                // Check the type of exception and handle accordingly
                 case ItemNotFoundException:
                     httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
                     await httpContext.Response.WriteAsync("Resource not found");
@@ -38,7 +37,6 @@ public class ErrorHandlingMiddleware
                     await httpContext.Response.WriteAsync("Bad request");
                     break;
                 default:
-                    // For unexpected exceptions
                     httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
                     await httpContext.Response.WriteAsync("An unexpected error occurred");
                     break;

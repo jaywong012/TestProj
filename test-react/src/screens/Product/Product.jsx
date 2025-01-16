@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useState } from "react";
 import ProductList from "./components/ProductList";
 import AddEditProduct from "./components/AddEditProduct";
 import productApiServices from "@/features/apis/products/products";
-import categoryApiServices from "../../features/apis/categories/categories";
+import categoryApiServices from "@/features/apis/categories/categories";
 import { useDispatch, useSelector } from "react-redux";
-import { setProducts } from "../../features/redux/slicers/productSlice";
-import { setCategories } from "../../features/redux/slicers/categorySlice";
+import { setPages, setProducts } from "@/features/redux/slicers/productSlice";
+import { setCategories } from "@/features/redux/slicers/categorySlice";
 import { Container } from "react-bootstrap";
-import { emptyGuid } from "../../constants/common";
+import { defaultPageIndex, emptyGuid, pageSize } from "../../constants/common";
 
 const Product = () => {
   const defaultData = {
@@ -15,13 +15,14 @@ const Product = () => {
     productPrice: "",
     productCategory: "",
   };
-  const dispatch = useDispatch();
-  const products = useSelector((state) => state.product.products);
-  const categories = useSelector((state) => state.category.categories);
-
   const [formData, setFormData] = useState(defaultData);
   const [loading, setLoading] = useState(true);
   const [editId, setEditId] = useState(null);
+
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.product.products);
+  const categories = useSelector((state) => state.category.categories);
+  const currentPage = useSelector((state) => state.product.currentPage);
 
   useEffect(() => {
     getProducts();
@@ -30,8 +31,10 @@ const Product = () => {
 
   const getProducts = async () => {
     try {
-      const result = await productApiServices.getProductsByPaging();
+      const pageIndex = currentPage ?? defaultPageIndex;
+      const result = await productApiServices.getProductsByPaging(pageIndex, pageSize);
       dispatch(setProducts(result?.products));
+      dispatch(setPages(result?.totalPages));
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
