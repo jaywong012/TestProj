@@ -1,0 +1,7 @@
+@NewProject_HostAddress = https://localhost:7124
+
+
+GET {{NewProject_HostAddress}}/api/product
+Accept: application/json
+
+###

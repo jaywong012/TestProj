@@ -1,0 +1,13 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=efcd3512_002D9e7e_002D4645_002Db358_002Dc7fb9cc7ebb5/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="DeleteCategoryById" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Or&gt;&#xD;
+    &lt;ProjectFolder&gt;096AB6AF-0C52-4FAC-AF88-D71DDDD40FC1/d:IntegrationTests&lt;/ProjectFolder&gt;&#xD;
+    &lt;TestAncestor&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::096AB6AF-0C52-4FAC-AF88-D71DDDD40FC1::net8.0::Test.INTest.Test&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::096AB6AF-0C52-4FAC-AF88-D71DDDD40FC1::net8.0::Test.UnitTest.Products.GetProductsList.GetAllProducts_EmptyListProducts_ReturnEmptyList&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::096AB6AF-0C52-4FAC-AF88-D71DDDD40FC1::net8.0::Test.INTest&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::7F1C8C3D-A124-4A44-8E5F-4D27F3F76EC2::net8.0::NewProject.xUnitTest.UnitTest.Test1&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::096AB6AF-0C52-4FAC-AF88-D71DDDD40FC1::net8.0::Test.UnitTest.Products.GetProductList.GetProductListByPaging_NotEmptyListProducts_ReturnExactPageAndSize&lt;/TestId&gt;&#xD;
+    &lt;/TestAncestor&gt;&#xD;
+  &lt;/Or&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
