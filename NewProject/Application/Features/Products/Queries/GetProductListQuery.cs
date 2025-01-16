@@ -27,7 +27,7 @@ public class GetProductListRequestHandler : IRequestHandler<GetProductListQuery,
                 Id = p.Id,
                 Name = p.Name,
                 CategoryId = p.CategoryId,
-                LastSavedTime = p.LastSavedTime,
+                LastSavedTime = p.GetFormattedLastSavedTime(),
                 Price = p.Price,
                 CategoryName = p.Category != null ? p.Category.Name : "",
                 CreatedTime = p.LastCreatedTime
@@ -50,7 +50,7 @@ public class GetProductQueryResponse
     public Guid? CategoryId { get; set; }
 
     [JsonPropertyName("lastSavedTime")]
-    public DateTime? LastSavedTime { get; init; }
+    public string LastSavedTime { get; init; }
 
     [JsonPropertyName("createdTime")]
     public DateTime? CreatedTime { get; init; }

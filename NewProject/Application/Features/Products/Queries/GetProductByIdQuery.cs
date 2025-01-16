@@ -31,7 +31,7 @@ public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, G
             CategoryName = product.Category?.Name,
             CategoryId = product.CategoryId,
             Name = product.Name,
-            LastSavedTime = product.LastSavedTime,
+            LastSavedTime = product.GetFormattedLastSavedTime(),
             Price = product.Price
         };
 
