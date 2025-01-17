@@ -6,5 +6,8 @@ namespace Infrastructure.Repositories;
 
 public class AccountRepository : GenericRepository<Account>, IAccountRepository
 {
-    public AccountRepository(NewProjectDbContext context) : base(context) { }
+
+    public AccountRepository(NewProjectDbContext context) : base(context)
+    {
+    }
 }

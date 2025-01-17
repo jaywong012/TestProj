@@ -11,22 +11,24 @@ const Login = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if(token !== null){
-        navigate("/");
+    if (token !== null) {
+      navigate("/");
     }
   }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const loginDetail ={
+      const loginDetail = {
         username,
-        password
-      }
+        password,
+      };
       const response = await loginServices.login(loginDetail);
-      localStorage.setItem("token", response);
-      setError("");
-      navigate("/");
+      if (response) {
+        localStorage.setItem("token", response);
+        setError("");
+        navigate("/");
+      }
     } catch (err) {
       setError("Invalid credentials");
     }

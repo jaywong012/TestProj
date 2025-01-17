@@ -1,4 +1,4 @@
-﻿using Application.Accounts.Commands;
+﻿using Application.Features.Accounts.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +13,7 @@ public class AccountController : ControllerBase
     {
         _mediator = mediator;
     }
+
     [HttpPost]
     public async Task<IActionResult> RegisterAccount([FromBody] RegisterAccountCommandRequest request)
     {

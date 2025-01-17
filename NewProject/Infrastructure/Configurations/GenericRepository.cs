@@ -23,7 +23,6 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseModel
     public async Task<T?> GetById(Guid id)
     {
         var result = await _dbSet.FirstOrDefaultAsync(r => r.Id == id && !r.IsDeleted);
-        //if (result == null) throw new KeyNotFoundException($"Entity with ID {id} not found.");
         return result;
     }
 
