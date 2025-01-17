@@ -53,7 +53,11 @@ public class ProductController : ControllerBase
         var byteArray = Encoding.UTF8.GetBytes(response);
         var stream = new MemoryStream(byteArray);
 
-        return File(stream, "text/csv", "product.csv");
+        //return File(stream, "text/csv", "product.csv"); // memory leak
+        return new FileStreamResult(stream, "text/csv")
+        {
+            FileDownloadName = "product.csv"
+        };
     }
 
     [HttpPost]
