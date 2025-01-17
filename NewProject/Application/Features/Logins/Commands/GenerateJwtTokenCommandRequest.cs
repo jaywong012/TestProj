@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Application.Features.Accounts.Commands;
 using Application.Common;
 using Domain.Base;
 using Domain.Interfaces;
@@ -19,19 +20,28 @@ public class GenerateJwtTokenCommandRequest : IRequest<string>
 
 public class GenerateJwtTokenCommandRequestHandler : IRequestHandler<GenerateJwtTokenCommandRequest, string>
 {
-    private readonly  IUnitOfWork _unitOfWork;
     private readonly string _key;
+    private readonly IMediator _mediator;
     public GenerateJwtTokenCommandRequestHandler(IUnitOfWork unitOfWork
-        , IOptions<JwtSettings> jwtSettings
+        , IOptions<JwtSettings> jwtSettings,
+        IMediator mediator
     )
     {
-        _unitOfWork = unitOfWork;
         _key = jwtSettings.Value.Key;
+        _mediator = mediator;
     }
 
     public async Task<string> Handle(GenerateJwtTokenCommandRequest request, CancellationToken cancellationToken)
     {
-        if (request.UserName != "admin" && request.Password != "123") return await Task.FromResult("");
+        var userQuery = new GetAccountByUserNameCommandRequest
+        {
+            UserName = request.UserName
+        };
+        var user = await _mediator.Send(userQuery, cancellationToken);
+        if (!BCrypt.Net.BCrypt.Verify(request.Password, user.Hash))
+        {
+            throw new UnauthorizedAccessException("Invalid username or password.");
+        }
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var encodeKey = Encoding.ASCII.GetBytes(_key);

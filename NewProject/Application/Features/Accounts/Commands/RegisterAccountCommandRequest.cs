@@ -1,9 +1,8 @@
-﻿using Application.Common;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Interfaces;
 using MediatR;
 
-namespace Application.Accounts.Commands;
+namespace Application.Features.Accounts.Commands;
 
 public class RegisterAccountCommandRequest : IRequest<bool>
 {
@@ -32,7 +31,6 @@ public class RegisterAccountCommandRequestHandler : IRequestHandler<RegisterAcco
         {
             UserName = request.UserName,
             Hash = hashedPassword,
-            Salt = salt,
             Role = request.Role
         };
         await _unitOfWork.AccountRepository.Add(account);

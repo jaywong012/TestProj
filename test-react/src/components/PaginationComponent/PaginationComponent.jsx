@@ -24,7 +24,7 @@ const PaginationComponent = ({ currentPage, totalPages, onPageChange }) => {
       onPageChange(Math.floor((currentPage + totalPages) / 2));
     }
   };
-
+  
   return (
     <Pagination>
       <Pagination.Prev

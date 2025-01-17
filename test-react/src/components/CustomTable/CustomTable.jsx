@@ -29,7 +29,6 @@ const CustomTable = ({
     fetchDataByPaging(pageNumber);
   };
   const placeholderCount = 10 - itemArray?.length;
-
   return (
     <>
       <div
@@ -88,7 +87,7 @@ const CustomTable = ({
                 ))}
             </tbody>
           </Table>
-          {totalPages && (
+          {totalPages > 0 && (
             <PaginationComponent
               currentPage={currentPage}
               totalPages={totalPages}

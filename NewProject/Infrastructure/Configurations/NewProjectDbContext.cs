@@ -22,6 +22,8 @@ public sealed class NewProjectDbContext : DbContext
 
     public DbSet<Category>? Categories { get; set; }
 
+    public DbSet<Account>? Accounts { get; set; }
+
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
     {
         foreach (var entry in ChangeTracker.Entries<BaseModel>())

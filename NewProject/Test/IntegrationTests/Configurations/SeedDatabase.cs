@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Common;
+using Domain.Entities;
 using Infrastructure.Configurations;
 
 namespace Test.IntegrationTests.Configurations;
@@ -23,6 +24,16 @@ public static class SeedDatabase
         {
             new() {Id = Guid.Parse("A005FC52-5AE6-4400-4752-08DD2FB6F43A"), Name = "Water"},
             new() {Id = Guid.Parse("A005FC52-5AE6-4400-4752-08DD2FB6F43B"), Name = "Food"}
+        });
+        context.SaveChanges();
+    }
+    public static void SeedAccounts(NewProjectDbContext context)
+    {
+        if (context.Accounts == null) return;
+        var hashedPassword = BCrypt.Net.BCrypt.HashPassword("123");
+        context.Accounts.AddRange(new List<Account>
+        {
+            new() {Id = Guid.Parse("A005FC52-5AE6-4400-4752-08DD2FB6F43A"), UserName = "jac", Hash = hashedPassword, Role = Constants.ADMIN},
         });
         context.SaveChanges();
     }

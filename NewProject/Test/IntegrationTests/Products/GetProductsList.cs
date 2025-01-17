@@ -52,6 +52,7 @@ public class GetProductsList
     public async Task GetProductListByPaging_NotEmptyItems_ReturnExactPageAndItems()
     {
         SeedDatabase.SeedProducts(_configurations.Context);
+        SeedDatabase.SeedAccounts(_configurations.Context);
         GetProductListByPagingQuery pageRequest = new()
         {
             PageIndex = 2,
@@ -60,7 +61,7 @@ public class GetProductsList
 
         var request = new GenerateJwtTokenCommandRequest()
         {
-            UserName = "admin",
+            UserName = "jac",
             Password = "123"
         };
 
