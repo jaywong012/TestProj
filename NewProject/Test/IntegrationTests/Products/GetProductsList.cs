@@ -1,4 +1,7 @@
-﻿using System.Text.Json;
+﻿using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
+using Application.Features.Logins.Commands;
 using Application.Features.Products.Queries;
 using Domain.Entities;
 using Test.IntegrationTests.Configurations;
@@ -46,7 +49,7 @@ public class GetProductsList
     }
 
     [Test]
-    public void GetProductListByPaging_NotEmptyItems_ReturnExactPageAndItems()
+    public async Task GetProductListByPaging_NotEmptyItems_ReturnExactPageAndItems()
     {
         SeedDatabase.SeedProducts(_configurations.Context);
         GetProductListByPagingQuery pageRequest = new()
@@ -54,6 +57,19 @@ public class GetProductsList
             PageIndex = 2,
             PageSize = 2
         };
+
+        var request = new GenerateJwtTokenCommandRequest()
+        {
+            UserName = "admin",
+            Password = "123"
+        };
+
+        var jsonContent = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+        var loginResponse = await _configurations.Client.PostAsync($"api/Login", jsonContent);
+        loginResponse.EnsureSuccessStatusCode();
+        var jwtToken = loginResponse.Content.ReadAsStringAsync().Result;
+
+        _configurations.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
         var response = _configurations.Client.GetAsync($"api/Product/paged?pageIndex={pageRequest.PageIndex}&pageSize={pageRequest.PageSize}").Result;
         var responseBody = response.Content.ReadAsStringAsync().Result;
         var content = JsonSerializer.Deserialize<PagedProductListResponse>(responseBody);

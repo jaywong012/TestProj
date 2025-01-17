@@ -1,13 +1,11 @@
-using System.Threading.RateLimiting;
 using Application;
+using Application.Common;
+using Domain.Base;
 using Infrastructure;
 using Infrastructure.CustomMiddleware;
-using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 
 builder.Services.AddCors(options =>
 {
@@ -19,19 +17,11 @@ builder.Services.AddCors(options =>
             .WithHeaders("Content-Type"));
 });
 
-builder.Services.AddRateLimiter(options =>
-{
-    options.AddPolicy("IpPolicy", context =>
-        RateLimitPartition.Get(
-            partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
-            factory: key => new FixedWindowRateLimiter(new FixedWindowRateLimiterOptions
-            {
-                PermitLimit = 10, 
-                Window = TimeSpan.FromMinutes(1),
-                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
-                QueueLimit = 0
-            })));
-});
+builder.Services.AddRateLimiterConfiguration(builder.Configuration);
+builder.Services.AddAuthenticateConfiguration(builder.Configuration);
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("AdminPolicy", policy => policy.RequireRole(Constants.ADMIN))
+    .AddPolicy("UserPolicy", policy => policy.RequireRole(Constants.USER));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -42,10 +32,10 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureConfigurations(builder.Configuration);
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -62,6 +52,7 @@ app.UseErrorHandling();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

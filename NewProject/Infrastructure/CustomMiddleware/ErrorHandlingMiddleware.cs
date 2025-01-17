@@ -32,6 +32,10 @@ public class ErrorHandlingMiddleware
                     httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
                     await httpContext.Response.WriteAsync("Resource not found");
                     break;
+                case UnAuthorizeException:
+                    httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    await httpContext.Response.WriteAsync("Unable to authorize your account");
+                    break;
                 case InvalidOperationException:
                     httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
                     await httpContext.Response.WriteAsync("Bad request");
