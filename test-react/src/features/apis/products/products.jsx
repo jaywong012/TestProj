@@ -1,5 +1,5 @@
 import endPoint from "@/constants/endPoint";
-import api from "@/features/config";
+import api from "../config";
 
 const productApiServices = {
   getProducts: async () => {
