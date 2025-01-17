@@ -9,7 +9,7 @@ public class CreateProductCommandRequest : IRequest
 {
     [Required(ErrorMessage = "Name is required")]
     [StringLength(100, ErrorMessage = "Name must not exceed 100 characters")]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [Required(ErrorMessage = "Price is required")]
     [Range(1, 1_000_000_000, ErrorMessage = "Price must between 1 and 1 billion")]
