@@ -9,6 +9,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     private readonly NewProjectDbContext _dbContext;
     private IProductRepository? _productRepository;
     private ICategoryRepository? _categoryRepository;
+    private IAccountRepository? _accountRepository;
 
     public UnitOfWork(NewProjectDbContext dbContext)
     {
@@ -20,6 +21,9 @@ public class UnitOfWork : IUnitOfWork, IDisposable
 
     public ICategoryRepository CategoryRepository =>
         _categoryRepository ??= new CategoryRepository(_dbContext);
+
+    public IAccountRepository AccountRepository => 
+        _accountRepository ??= new AccountRepository(_dbContext);
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

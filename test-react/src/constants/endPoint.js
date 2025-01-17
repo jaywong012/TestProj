@@ -1,6 +1,7 @@
 const endPoint = {
     PRODUCT: 'product',
-    CATEGORY: 'category'
+    CATEGORY: 'category',
+    LOGIN: 'login'
 }
 
 export default endPoint;

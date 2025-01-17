@@ -2,8 +2,8 @@
 using Application.Features.Products.Commands;
 using Application.Features.Products.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace NewProject.APIs.Controllers;
 
@@ -39,6 +39,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("paged")]
+    [Authorize(Policy = "AdminPolicy")]
     public async Task<IActionResult> GetProductListByPaging([FromQuery] GetProductListByPagingQuery request)
     {
         var response = await _mediator.Send(request);

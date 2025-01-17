@@ -8,6 +8,8 @@ public interface IUnitOfWork
 
     ICategoryRepository CategoryRepository { get; }
 
+    IAccountRepository AccountRepository { get; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
 }

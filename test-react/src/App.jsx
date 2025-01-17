@@ -1,19 +1,45 @@
 import React from "react";
-import Footer from "./components/Footer";
-import MyNavbar from "./components/Nav";
+import Footer from "@/screens/Footer";
 import Product from "@/screens/Product/Product";
 import Category from "@/screens/Category/Category";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import MyNavbar from "@/screens/Nav";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+} from "react-router-dom";
+import Login from "./screens/Login/Login";
+import PrivateRoute from "./components/RouteConfigurations/PrivateRoute";
 
 const App = () => {
   return (
     <Router>
-        <MyNavbar />
-        <Routes>
-          <Route path="/" element={<Product />} />
-          <Route path="/category" element={<Category />} />
-        </Routes>
-        <Footer />
+      <MyNavbar />
+      <Routes>
+        <Route
+          path="/login"
+          element={
+            <Login />
+          }
+        />
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <Product />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/category"
+          element={
+            <PrivateRoute>
+              <Category />
+            </PrivateRoute>
+          }
+        />
+      </Routes>
+      <Footer />
     </Router>
   );
 };

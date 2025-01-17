@@ -3,10 +3,28 @@ import apiUrls from "./apiUrls";
 
 const apiUrl = apiUrls.local;
 
-const axiosInstance = {
+const axiosInstance = axios.create({
+  baseURL: `${apiUrl}/api/`,
+});
+
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if(token){
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  error => {
+    return Promise.reject(new Error(error));
+  }
+)
+
+const api = {
   get: async (endPoint) => {
     try {
-      const response = await axios.get(`${apiUrl}/api/${endPoint}`);
+      const response = await axiosInstance.get(endPoint);
       return response?.data;
     } catch (e) {
       console.error("Error fetching data:", e);
@@ -14,7 +32,8 @@ const axiosInstance = {
   },
   post: async (endPoint, data) => {
     try {
-      await axios.post(`${apiUrl}/api/${endPoint}`, data);
+      const response = await axiosInstance.post(endPoint, data);
+      return response?.data;
     } catch (e) {
       console.error("Error adding data:", e);
     }
@@ -22,18 +41,18 @@ const axiosInstance = {
   put: async (endPoint, data) => {
     try {
       const id = data.id;
-      await axios.put(`${apiUrl}/api/${endPoint}/${id}`, data);
+      await axiosInstance.put(`${endPoint}/${id}`, data);
     } catch (e) {
       console.error("Error updating data:", e);
     }
   },
   delete: async (endPoint, id) => {
     try {
-      await axios.delete(`${apiUrl}/api/${endPoint}/${id}`);
+      await axiosInstance.delete(`${endPoint}/${id}`);
     } catch (e) {
-      console.error("Error updating data:", e);
+      console.error("Error deleting data:", e);
     }
   },
 };
 
-export default axiosInstance;
+export default api;
