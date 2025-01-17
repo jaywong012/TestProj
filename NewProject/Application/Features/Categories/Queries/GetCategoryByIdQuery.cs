@@ -45,7 +45,7 @@ public class GetCategoryQueryResponse
     public Guid Id { get; set; }
 
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public required string Name { get; set; }
     [JsonPropertyName("lastSavedTime")]
     public DateTime? LastSavedTime { get; init; }
 }

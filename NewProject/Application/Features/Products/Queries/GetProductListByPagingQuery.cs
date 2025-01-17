@@ -1,11 +1,13 @@
 ﻿using System.Text.Json.Serialization;
 using Domain.Interfaces;
+using Domain.Utilities;
 using MediatR;
 
 namespace Application.Features.Products.Queries;
 
 public class GetProductListByPagingQuery : IRequest<PagedProductListResponse>
 {
+    public string? SearchKey { get; set; }
     public int PageIndex { get; init; }
     public int PageSize { get; init; } = 10;
 }
@@ -18,31 +20,35 @@ public class GetProductListByPagingQueryHandler : IRequestHandler<GetProductList
         _unitOfWork = unitOfWork;
     }
 
-    public Task<PagedProductListResponse> Handle(GetProductListByPagingQuery request, CancellationToken cancellationToken)
+    public Task<PagedProductListResponse> Handle(GetProductListByPagingQuery query, CancellationToken cancellationToken)
     {
-        var productsCount = _unitOfWork
+        var productsQuery = _unitOfWork
             .ProductRepository
-            .GetAll()
-            .Count();
+            .GetAll();
 
-        var totalPages = (int)Math.Ceiling(productsCount / (decimal)request.PageSize);
+        if (!string.IsNullOrEmpty(query.SearchKey))
+        {
+            productsQuery = productsQuery.Where(p => p.Name.Contains(query.SearchKey));
+        }
 
-        var pageIndex = request.PageIndex > 0 ? request.PageIndex - 1 : 0;
+        var productsCount = productsQuery.Count();
 
-        var pagedProducts= _unitOfWork
-            .ProductRepository
-            .GetAll()
+        var totalPages = (int)Math.Ceiling(productsCount / (decimal)query.PageSize);
+
+        var pageIndex = query.PageIndex > 0 ? query.PageIndex - 1 : 0;
+
+        var pagedProducts= productsQuery
             .OrderByDescending(o => o.LastSavedTime)  
-            .Skip(pageIndex * request.PageSize)
-            .Take(request.PageSize)
+            .Skip(pageIndex * query.PageSize)
+            .Take(query.PageSize)
             .Select(p => new GetProductQueryResponse
             {
                 Id = p.Id,
                 Name = p.Name,
                 CategoryId = p.CategoryId,
-                Price = p.Price,
+                Price = (int)p.Price,
                 CategoryName = p.Category != null ? p.Category.Name : "",
-                LastSavedTime = p.GetFormattedLastSavedTime()
+                LastSavedTime = FormatDateTime.ToViewAbleDateTime(p.LastSavedTime)
             });
 
         PagedProductListResponse response = new()

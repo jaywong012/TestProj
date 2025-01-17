@@ -1,12 +1,13 @@
 ﻿using System.Text.Json.Serialization;
 using MediatR;
 using Domain.Interfaces;
+using Domain.Utilities;
 
 namespace Application.Features.Products.Queries;
 
 public class GetProductListQuery : IRequest<List<GetProductQueryResponse>>
 {
-
+    public string? SearchKey { get; set; }
 }
 
 public class GetProductListRequestHandler : IRequestHandler<GetProductListQuery, List<GetProductQueryResponse>>
@@ -17,22 +18,28 @@ public class GetProductListRequestHandler : IRequestHandler<GetProductListQuery,
         _unitOfWork = unitOfWork;
     }
 
-    public Task<List<GetProductQueryResponse>> Handle(GetProductListQuery request, CancellationToken cancellationToken)
+    public Task<List<GetProductQueryResponse>> Handle(GetProductListQuery query, CancellationToken cancellationToken)
     {
-        var productList = _unitOfWork
+        var productListQuery = _unitOfWork
             .ProductRepository
-            .GetAll()
+            .GetAll();
+
+        if (!string.IsNullOrEmpty(query.SearchKey))
+        {
+            productListQuery = productListQuery.Where(p => p.Name.Contains(query.SearchKey));
+        }
+        var productList = productListQuery
+            .OrderByDescending(o => o.LastSavedTime)
             .Select(p => new GetProductQueryResponse
             {
                 Id = p.Id,
                 Name = p.Name,
                 CategoryId = p.CategoryId,
-                LastSavedTime = p.GetFormattedLastSavedTime(),
-                Price = p.Price,
+                LastSavedTime = FormatDateTime.ToViewAbleDateTime(p.LastSavedTime),
+                Price = (int)p.Price,
                 CategoryName = p.Category != null ? p.Category.Name : "",
                 CreatedTime = p.LastCreatedTime
             })
-            .OrderByDescending(o => o.LastSavedTime)
             .ToList();
         return Task.FromResult(productList);
     }
@@ -50,7 +57,7 @@ public class GetProductQueryResponse
     public Guid? CategoryId { get; set; }
 
     [JsonPropertyName("lastSavedTime")]
-    public string LastSavedTime { get; init; }
+    public string? LastSavedTime { get; init; }
 
     [JsonPropertyName("createdTime")]
     public DateTime? CreatedTime { get; init; }
@@ -59,5 +66,5 @@ public class GetProductQueryResponse
     public string? CategoryName { get; set; }
 
     [JsonPropertyName("price")]
-    public decimal Price { get; set; }
+    public int Price { get; set; }
 }

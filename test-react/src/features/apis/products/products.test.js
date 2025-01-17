@@ -20,9 +20,10 @@ describe('productApiServices', () => {
   test('getProductsByPaging should fetch products by paging', async () => {
     const page = 2;
     const size = 2;
+    const searchKey = "";
     mock.onGet(`${apiUrl}/api/product/paged?pageIndex=${page}&pageSize=${size}`).reply(200, data);
 
-    const response = await productApiServices.getProductsByPaging(page, size);
+    const response = await productApiServices.getProductsByPaging({ searchKey, pageIndex: page, pageSize: size });
     expect(response).toEqual(data);
   });
 

@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Domain.ErrorHandlingManagement;
 using Domain.Interfaces;
+using Domain.Utilities;
 
 namespace Application.Features.Products.Queries;
 
@@ -17,12 +18,12 @@ public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, G
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<GetProductQueryResponse?> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
+    public async Task<GetProductQueryResponse?> Handle(GetProductByIdQuery query, CancellationToken cancellationToken)
     {
-        var product = await _unitOfWork.ProductRepository.GetById(request.Id);
+        var product = await _unitOfWork.ProductRepository.GetById(query.Id);
         if (product == null)
         {
-            throw new ItemNotFoundException($"Product with ID {request.Id} not found");
+            throw new ItemNotFoundException($"Product with ID {query.Id} not found");
         }
 
         GetProductQueryResponse result = new()
@@ -31,8 +32,8 @@ public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, G
             CategoryName = product.Category?.Name,
             CategoryId = product.CategoryId,
             Name = product.Name,
-            LastSavedTime = product.GetFormattedLastSavedTime(),
-            Price = product.Price
+            LastSavedTime = FormatDateTime.ToViewAbleDateTime(product.LastSavedTime),
+            Price = (int)product.Price
         };
 
         return result;
