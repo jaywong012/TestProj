@@ -22,8 +22,8 @@ public class GenerateJwtTokenCommandRequestHandler : IRequestHandler<GenerateJwt
 {
     private readonly string _key;
     private readonly IMediator _mediator;
-    public GenerateJwtTokenCommandRequestHandler(IUnitOfWork unitOfWork
-        , IOptions<JwtSettings> jwtSettings,
+    public GenerateJwtTokenCommandRequestHandler(
+        IOptions<JwtSettings> jwtSettings,
         IMediator mediator
     )
     {
@@ -50,7 +50,7 @@ public class GenerateJwtTokenCommandRequestHandler : IRequestHandler<GenerateJwt
             Subject = new ClaimsIdentity(new[]
             {
                 new Claim(ClaimTypes.Name, request.UserName),
-                new Claim(ClaimTypes.Role, Constants.ADMIN),
+                new Claim(ClaimTypes.Role, Constants.ADMIN)
             }),
             Expires = DateTime.UtcNow.AddYears(1),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(encodeKey),

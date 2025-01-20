@@ -59,14 +59,14 @@ public class GetProductsList
             PageSize = 2
         };
 
-        var request = new GenerateJwtTokenCommandRequest()
+        var request = new GenerateJwtTokenCommandRequest
         {
             UserName = "jac",
             Password = "123"
         };
 
         var jsonContent = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
-        var loginResponse = await _configurations.Client.PostAsync($"api/Login", jsonContent);
+        var loginResponse = await _configurations.Client.PostAsync("api/Login", jsonContent);
         loginResponse.EnsureSuccessStatusCode();
         var jwtToken = loginResponse.Content.ReadAsStringAsync().Result;
 

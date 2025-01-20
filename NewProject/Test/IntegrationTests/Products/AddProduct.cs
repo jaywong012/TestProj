@@ -33,7 +33,7 @@ public class AddProduct
         var jsonContent = new StringContent(JsonSerializer.Serialize(product), Encoding.UTF8, "application/json");
 
 
-        var postResponse = await _configurations.Client.PostAsync($"api/product", jsonContent);
+        var postResponse = await _configurations.Client.PostAsync("api/product", jsonContent);
         postResponse.EnsureSuccessStatusCode();
     }
 }

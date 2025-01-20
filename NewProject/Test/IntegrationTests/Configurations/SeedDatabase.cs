@@ -33,7 +33,7 @@ public static class SeedDatabase
         var hashedPassword = BCrypt.Net.BCrypt.HashPassword("123");
         context.Accounts.AddRange(new List<Account>
         {
-            new() {Id = Guid.Parse("A005FC52-5AE6-4400-4752-08DD2FB6F43A"), UserName = "jac", Hash = hashedPassword, Role = Constants.ADMIN},
+            new() {Id = Guid.Parse("A005FC52-5AE6-4400-4752-08DD2FB6F43A"), UserName = "jac", Hash = hashedPassword, Role = Constants.ADMIN}
         });
         context.SaveChanges();
     }
