@@ -6,7 +6,7 @@
     "start-script": "react-scripts start",
     "start": "webpack serve --mode development",
     "build": "webpack --mode production",
-    "test": "jest"
+    "test": "jest --coverage"  
   },
   "keywords": [],
   "author": "",
@@ -59,6 +59,21 @@
     },
     "moduleNameMapper": {
       "\\.(css|scss)$": "identity-obj-proxy"
-    }
+    },
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!src/**/*.test.{js,jsx}",
+      "!src/index.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 10,
+        "functions": 10,
+        "lines": 10,
+        "statements": 10
+      }
+    },
+    "coverageReporters": ["json", "lcov", "text", "clover"]
   }
 }

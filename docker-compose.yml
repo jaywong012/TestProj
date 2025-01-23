@@ -1,0 +1,23 @@
+services:
+  fe:
+    build:
+      context: ./test-react
+      dockerfile: Dockerfile
+    container_name: Web
+    ports:
+      - "3000:80"
+
+  be:
+    build:
+      context: .            
+      dockerfile: ./NewProject/NewProject/Dockerfile
+    container_name: APIs
+    ports:
+      - "7124:7124"
+    environment:
+      ASPNETCORE_URLS: https://0.0.0.0:7124
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=host.docker.internal;Database=NewProject;Trusted_Connection=True;TrustServerCertificate=True;"
+      JwtSettings__Key: "Tfn5CT8TQcCD1tXCvQj0ceYQsPEWWb0a"
+    volumes:
+      - ~/.aspnet/https:/root/.aspnet/https:ro

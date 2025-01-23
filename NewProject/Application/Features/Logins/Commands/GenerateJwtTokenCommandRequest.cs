@@ -4,7 +4,7 @@ using System.Text;
 using Application.Features.Accounts.Commands;
 using Application.Common;
 using Domain.Base;
-using Domain.Interfaces;
+using Domain.ErrorHandlingManagement;
 using MediatR;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -40,7 +40,7 @@ public class GenerateJwtTokenCommandRequestHandler : IRequestHandler<GenerateJwt
         var user = await _mediator.Send(userQuery, cancellationToken);
         if (!BCrypt.Net.BCrypt.Verify(request.Password, user.Hash))
         {
-            throw new UnauthorizedAccessException("Invalid username or password.");
+            throw new UnAuthorizeException("Invalid username or password.");
         }
 
         var tokenHandler = new JwtSecurityTokenHandler();

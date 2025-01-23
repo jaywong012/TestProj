@@ -6,6 +6,7 @@ using Infrastructure.Configurations;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +16,21 @@ namespace Infrastructure;
 
 public static class DependencyInjection
 {
+    public static void ConfigurationWebHost(this WebApplicationBuilder builder)
+    {
+        var isContainerized = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
+        if (isContainerized)
+        {
+            builder.WebHost.UseKestrel(options =>
+            {
+                options.ListenAnyIP(7124, listenOptions =>
+                {
+                    listenOptions.UseHttps("/root/.aspnet/https/NewProject.pfx", "Test123");
+                });
+            });
+        }
+    }
+
     public static void AddInfrastructureConfigurations(this IServiceCollection services, IConfiguration configuration)
     {
         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");

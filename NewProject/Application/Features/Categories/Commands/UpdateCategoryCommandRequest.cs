@@ -2,7 +2,6 @@
 using MediatR;
 using Domain.Entities;
 using Domain.Interfaces;
-using Domain.ErrorHandlingManagement;
 
 namespace Application.Features.Categories.Commands;
 
@@ -36,12 +35,7 @@ public class UpdateCategoryCommandRequestHandler : IRequestHandler<UpdateCategor
             Name = request.Name
         };
 
-        var result = await _mediator.Send(new GetCategoryByIdQuery { Id = request.Id }, cancellationToken);
-
-        if (result == null)
-        {
-            throw new ItemNotFoundException($"Category with ID {request.Id} not found");
-        }
+        await _mediator.Send(new GetCategoryByIdQuery { Id = request.Id }, cancellationToken);
 
         await _unitOfWork.CategoryRepository.Update(category);
 

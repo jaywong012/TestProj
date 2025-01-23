@@ -1,0 +1,24 @@
+# Ignore for all services
+**/bin/
+**/obj/
+**/node_modules/
+
+# Ignore user-specific files
+*.user
+*.suo
+*.vs/
+.vscode/
+
+# Ignore system-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore Git files
+.git/
+
+# Ignore logs and temp files
+*.log
+*.tmp
+dist/
+webpack.config.js
+babel.config.js

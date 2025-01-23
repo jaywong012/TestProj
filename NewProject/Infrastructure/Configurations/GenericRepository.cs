@@ -1,4 +1,5 @@
 ﻿using Domain.Base;
+using Domain.ErrorHandlingManagement;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,7 +38,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseModel
         var existingEntity = await _dbSet.FirstOrDefaultAsync(r => r.Id == entity.Id && !r.IsDeleted);
         if (existingEntity == null)
         {
-            throw new KeyNotFoundException($"Entity with ID {entity.Id} not found.");
+            throw new ItemNotFoundException($"Entity with ID {entity.Id} not found.");
         }
 
         _context.Entry(existingEntity).CurrentValues.SetValues(entity);
@@ -55,7 +56,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseModel
                 _context.Entry(existingEntity).State = EntityState.Modified;
                 break;
             default:
-                throw new KeyNotFoundException($"Entity with ID {id} not found.");
+                throw new ItemNotFoundException($"Entity with ID {id} not found.");
         }
 
         await _context.SaveChangesAsync();
