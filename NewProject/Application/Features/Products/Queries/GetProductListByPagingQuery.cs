@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
+using Application.Utilities;
 using Domain.Interfaces;
-using Domain.Utilities;
 using MediatR;
 
 namespace Application.Features.Products.Queries;
@@ -48,7 +48,7 @@ public class GetProductListByPagingQueryHandler : IRequestHandler<GetProductList
                 CategoryId = p.CategoryId,
                 Price = (int)p.Price,
                 CategoryName = p.Category != null ? p.Category.Name : "",
-                LastSavedTime = FormatDateTime.ToViewAbleDateTime(p.LastSavedTime)
+                LastSavedTime = FormatDateTime.HH_mm_MMM_dd(p.LastSavedTime)
             });
 
         PagedProductListResponse response = new()

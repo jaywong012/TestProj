@@ -1,7 +1,7 @@
-﻿using MediatR;
+﻿using Application.Utilities;
+using MediatR;
 using Domain.ErrorHandlingManagement;
 using Domain.Interfaces;
-using Domain.Utilities;
 
 namespace Application.Features.Products.Queries;
 
@@ -32,7 +32,7 @@ public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, G
             CategoryName = product.Category?.Name,
             CategoryId = product.CategoryId,
             Name = product.Name,
-            LastSavedTime = FormatDateTime.ToViewAbleDateTime(product.LastSavedTime),
+            LastSavedTime = FormatDateTime.HH_mm_MMM_dd(product.LastSavedTime),
             Price = (int)product.Price
         };
 

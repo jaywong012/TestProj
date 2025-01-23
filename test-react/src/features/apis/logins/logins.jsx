@@ -1,5 +1,5 @@
 import endPoint from "@/constants/endPoint";
-import api from "@/features/apis/config";
+import api from "@/features/config";
 
 const loginServices = {
     login: async (data) => {

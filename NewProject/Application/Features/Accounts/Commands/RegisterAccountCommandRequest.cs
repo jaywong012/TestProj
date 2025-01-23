@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Utilities;
+using Domain.Entities;
 using Domain.Interfaces;
 using MediatR;
 
@@ -23,9 +24,7 @@ public class RegisterAccountCommandRequestHandler : IRequestHandler<RegisterAcco
 
     public async Task<bool> Handle(RegisterAccountCommandRequest request, CancellationToken cancellationToken)
     {
-        var salt = BCrypt.Net.BCrypt.GenerateSalt();
-
-        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password, salt);
+        var hashedPassword = HashPassword.Hash(request.Password);
 
         Account account = new()
         {

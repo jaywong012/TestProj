@@ -1,6 +1,7 @@
 ##FE
-test-react/package-lock.json
-test-react/node_modules/
+**/package-lock.json
+**/node_modules/
+**/dist/
 
 ##BE
 **/bin/
@@ -8,3 +9,8 @@ test-react/node_modules/
 
 ##Others
 .vs
+TestResults
+coverage-report/
+coverage/
+*.user
+*.tmp

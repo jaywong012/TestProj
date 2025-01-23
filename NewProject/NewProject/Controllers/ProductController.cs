@@ -19,9 +19,8 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetListProduct()
+    public async Task<IActionResult> GetListProduct([FromQuery] GetProductListQuery query)
     {
-        GetProductListQuery query = new();
         var response = await _mediator.Send(query);
         return Ok(response);
     }
@@ -46,18 +45,18 @@ public class ProductController : ControllerBase
         return Ok(response);
     }
 
-    [HttpGet("download-file")]
-    public async Task<IActionResult> DownloadCsv([FromQuery] GenerateCsvCommandRequest request)
+    [HttpGet("generate-csv")]
+    public async Task<IActionResult> GenerateCsv([FromQuery] GenerateCsvCommandRequest request)
     {
         var response = await _mediator.Send(request);
         var byteArray = Encoding.UTF8.GetBytes(response);
         var stream = new MemoryStream(byteArray);
 
-        //return File(stream, "text/csv", "product.csv"); // memory leak
-        return new FileStreamResult(stream, "text/csv")
+        var fileStream =  new FileStreamResult(stream, "text/csv")
         {
             FileDownloadName = "product.csv"
         };
+        return fileStream;
     }
 
     [HttpPost]

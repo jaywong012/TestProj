@@ -2,7 +2,6 @@
 using Domain.Entities;
 using Domain.Interfaces;
 using Application.Features.Products.Queries;
-using Domain.ErrorHandlingManagement;
 
 namespace Application.Features.Products.Commands;
 
@@ -22,7 +21,7 @@ public class UpdateProductCommandRequest : IRequest<Product>
 
     public decimal Price { get; }
 
-    public Guid? CategoryId { get; }
+    public Guid? CategoryId { get; set; }
 }
 
 public class UpdateProductCommandRequestHandler : IRequestHandler<UpdateProductCommandRequest, Product>
@@ -42,11 +41,7 @@ public class UpdateProductCommandRequestHandler : IRequestHandler<UpdateProductC
         {
             Id = request.Id
         };
-        var existProduct = await _mediator.Send(existProductQuery, cancellationToken);
-        if (existProduct == null)
-        {
-            throw new ItemNotFoundException($"Product with ID {request.Id} not found");
-        }
+        await _mediator.Send(existProductQuery, cancellationToken);
 
         var categoryId = request.CategoryId == Guid.Empty ? null : request.CategoryId;
 

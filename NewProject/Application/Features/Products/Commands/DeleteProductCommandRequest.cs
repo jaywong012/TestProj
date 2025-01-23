@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Domain.Interfaces;
 using Application.Features.Products.Queries;
-using Domain.ErrorHandlingManagement;
 
 namespace Application.Features.Products.Commands;
 
@@ -27,11 +26,7 @@ public class DeleteProductCommandRequestHandler : IRequestHandler<DeleteProductC
         {
             Id = request.Id
         };
-        var existProduct = await _mediator.Send(existProductQuery, cancellationToken);
-        if (existProduct == null)
-        {
-            throw new ItemNotFoundException($"Product with ID {request.Id} not found");
-        }
+        await _mediator.Send(existProductQuery, cancellationToken);
         await _unitOfWork.ProductRepository.Delete(request.Id);
 
         return true;

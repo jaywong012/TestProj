@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
+using Application.Utilities;
 using MediatR;
 using Domain.Interfaces;
-using Domain.Utilities;
 
 namespace Application.Features.Products.Queries;
 
@@ -35,7 +35,7 @@ public class GetProductListRequestHandler : IRequestHandler<GetProductListQuery,
                 Id = p.Id,
                 Name = p.Name,
                 CategoryId = p.CategoryId,
-                LastSavedTime = FormatDateTime.ToViewAbleDateTime(p.LastSavedTime),
+                LastSavedTime = FormatDateTime.HH_mm_MMM_dd(p.LastSavedTime),
                 Price = (int)p.Price,
                 CategoryName = p.Category != null ? p.Category.Name : "",
                 CreatedTime = p.LastCreatedTime

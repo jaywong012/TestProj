@@ -16,7 +16,7 @@ const productApiServices = {
   downloadCsvFile: async (searchKey) => {
     const searchKeyParam = searchKey ? `?searchKey=${searchKey}` : "";
     const response = await api.get(
-      `${endPoint.PRODUCT}/download-file${searchKeyParam}`,
+      `${endPoint.PRODUCT}/generate-csv${searchKeyParam}`,
       { responseType: "blob" }
     );
     return response;

@@ -1,5 +1,5 @@
-﻿using System.Text;
-using Application.Features.Products.Queries;
+﻿using Application.Features.Products.Queries;
+using Application.Utilities;
 using MediatR;
 
 namespace Application.Features.Products.Commands;
@@ -25,23 +25,8 @@ public class GenerateCsvCommandRequestHandler : IRequestHandler<GenerateCsvComma
         };
         var products = await _mediator.Send(query, cancellationToken);
 
-        var csv = GenerateCsv(products);
+        var csv = CsvHelper.GenerateCsv(products);
 
         return csv;
-    }
-
-    private static string GenerateCsv(List<GetProductQueryResponse> products)
-    {
-        var csvBuilder = new StringBuilder();
-        
-        csvBuilder.AppendLine("Id,Name,CategoryId,LastSavedTime,CategoryName,Price");
-        
-        foreach (var product in products)
-        {
-            var csvRow = $"{product.Id},{product.Name},{product.CategoryId},{product.LastSavedTime},{product.CategoryName},{product.Price}";
-            csvBuilder.AppendLine(csvRow);
-        }
-
-        return csvBuilder.ToString();
     }
 }
