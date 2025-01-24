@@ -1,18 +1,20 @@
-﻿using Infrastructure.Configurations;
+﻿using Application.Features.Logins.Commands;
+using Infrastructure.Configurations;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Net.Http.Headers;
 
 namespace Test.Configurations.IntegrationTest;
 
 public class InitConfigModel
 {
-    public required HttpClient Client { get; init; }
+    public required HttpClient Client { get; set; }
     public required NewProjectDbContext Context { get; init; }
     public required WebApplicationFactory<Program> Factory { get; init; }
 
-    public void Dispose()
+    public void Dispose()               
     {
         Client.Dispose();
         Context.Dispose();
@@ -57,6 +59,7 @@ public static class InitConfigs
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
                 .Options;
         var context = new NewProjectDbContext(dbContextOptions);
+        SeedDatabase.SeedAccounts(context);
 
         return new InitConfigModel
         {
@@ -64,5 +67,22 @@ public static class InitConfigs
             Context = context,
             Factory = factory
         };
+    }
+
+    public static async Task<HttpClient> GenerateToken(HttpClient client)
+    {
+        var loginRequest = new GenerateJwtTokenCommandRequest
+        {
+            UserName = "jac",
+            Password = "123"
+        };
+
+        var jsonContent = Utilities.SerializeToJsonContent(loginRequest);
+        var loginResponse = await client.PostAsync("api/Login", jsonContent);
+        loginResponse.EnsureSuccessStatusCode();
+        var jwtToken = loginResponse.Content.ReadAsStringAsync().Result;
+
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+        return client;
     }
 }

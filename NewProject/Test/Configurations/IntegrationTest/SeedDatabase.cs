@@ -9,6 +9,7 @@ public static class SeedDatabase
     public static void SeedProducts(NewProjectDbContext context)
     {
         if (context.Products == null) return;
+        DbContextHelper.ClearEntities<Product>(context);
         context.Products.AddRange(new List<Product>
         {
             new() {Id = Guid.Parse("A005FC52-5AE6-4400-4752-08DD2FB6F43A"), Name = "CoCa", Price = 20, LastSavedTime = new DateTime()},
@@ -20,6 +21,7 @@ public static class SeedDatabase
     public static void SeedCategories(NewProjectDbContext context)
     {
         if (context.Categories == null) return;
+        DbContextHelper.ClearEntities<Category>(context);
         context.Categories.AddRange(new List<Category>
         {
             new() {Id = Guid.Parse("A005FC52-5AE6-4400-4752-08DD2FB6F43A"), Name = "Water"},
@@ -30,6 +32,7 @@ public static class SeedDatabase
     public static void SeedAccounts(NewProjectDbContext context)
     {
         if (context.Accounts == null) return;
+        DbContextHelper.ClearEntities<Account>(context);
         var hashedPassword = BCrypt.Net.BCrypt.HashPassword("123");
         context.Accounts.AddRange(new List<Account>
         {

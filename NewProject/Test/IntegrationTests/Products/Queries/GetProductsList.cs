@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Application.Common;
 using Application.Features.Products.Queries;
 using Domain.Entities;
 using Test.Configurations.IntegrationTest;
@@ -11,11 +12,14 @@ public class GetProductsList
     private GetProductListQuery _query;
 
     [SetUp]
-    public void Setup()
+    public async Task Setup()
     {
         _configurations = InitConfigs.SetupInMemoryDatabase();
-        DbContextHelper.ClearEntities<Product>(_configurations.Context);
-        _query = new GetProductListQuery();
+        _query = new GetProductListQuery
+        {
+            SearchKey = "CoCa"
+        };
+        _configurations.Client = await InitConfigs.GenerateToken(_configurations.Client);
     }
 
     [TearDown]
@@ -27,7 +31,8 @@ public class GetProductsList
     [Test]
     public void GetAllProducts_EmptyList_ReturnEmpty()
     {
-        var response = _configurations.Client.GetAsync("api/product").Result;
+        DbContextHelper.ClearEntities<Product>(_configurations.Context);
+        var response = _configurations.Client.GetAsync(EndPointConstants.PRODUCT).Result;
         var responseBody = response.Content.ReadAsStringAsync().Result;
         var content = JsonSerializer.Deserialize<List<Product>>(responseBody);
         Assert.That(content, Is.Empty);
@@ -37,8 +42,7 @@ public class GetProductsList
     public void GetAllProducts_HaveSearchKey_Return1Items()
     {
         SeedDatabase.SeedProducts(_configurations.Context);
-        _query.SearchKey = "CoCa";
-        var response = _configurations.Client.GetAsync($"api/product?searchKey={_query.SearchKey}").Result;
+        var response = _configurations.Client.GetAsync($"{EndPointConstants.PRODUCT}?searchKey={_query.SearchKey}").Result;
         var responseBody = response.Content.ReadAsStringAsync().Result;
         var content = JsonSerializer.Deserialize<List<GetProductQueryResponse>>(responseBody);
         Assert.That(content, Is.Not.Null);
@@ -52,7 +56,7 @@ public class GetProductsList
     public void GetAllProducts_Has3Items_Return3Items()
     {
         SeedDatabase.SeedProducts(_configurations.Context);
-        var response = _configurations.Client.GetAsync("api/product").Result;
+        var response = _configurations.Client.GetAsync(EndPointConstants.PRODUCT).Result;
         var responseBody = response.Content.ReadAsStringAsync().Result;
         var content = JsonSerializer.Deserialize<List<GetProductQueryResponse>>(responseBody);
         Assert.That(content, Is.Not.Null);

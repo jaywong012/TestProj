@@ -4,7 +4,4 @@ using Infrastructure.Configurations;
 
 namespace Infrastructure.Repositories;
 
-public class CategoryRepository : GenericRepository<Category>, ICategoryRepository
-{
-    public CategoryRepository(NewProjectDbContext context) : base(context) { }
-}
+public class CategoryRepository(NewProjectDbContext context) : GenericRepository<Category>(context), ICategoryRepository;

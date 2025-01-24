@@ -1,6 +1,4 @@
-﻿using System.Text;
-using System.Text.Json;
-using Application.Common;
+﻿using Application.Common;
 using Application.Features.Categories.Commands;
 using Domain.Entities;
 using Test.Configurations.IntegrationTest;
@@ -9,20 +7,21 @@ namespace Test.IntegrationTests.Categories.Commands;
 
 public class CreateCategory
 {
-    private InitConfigModel _configuration;
+    private InitConfigModel _configurations;
     private CreateCategoryCommandRequest _commandRequest;
 
     [SetUp]
-    public void SetUp()
+    public async Task SetUp()
     {
-        _configuration = InitConfigs.SetupInMemoryDatabase();
+        _configurations = InitConfigs.SetupInMemoryDatabase();
         _commandRequest = new CreateCategoryCommandRequest("Name");
+        _configurations.Client = await InitConfigs.GenerateToken(_configurations.Client);
     }
 
     [TearDown]
     public void TearDown()
     {
-        _configuration.Dispose();
+        _configurations.Dispose();
     }
 
     [Test]
@@ -33,9 +32,9 @@ public class CreateCategory
             Name = _commandRequest.Name,
         };
 
-        var jsonContent = new StringContent(JsonSerializer.Serialize(category), Encoding.UTF8, Constants.APPLICATION_JSON);
+        var jsonContent = Utilities.SerializeToJsonContent(category);
 
-        var response = await _configuration.Client.PostAsync("api/category", jsonContent);
+        var response = await _configurations.Client.PostAsync(EndPointConstants.CATEGORY, jsonContent);
 
         Assert.That(response.IsSuccessStatusCode);
     }

@@ -6,18 +6,12 @@ namespace NewProject.APIs.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AccountController : ControllerBase
+public class AccountController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-    public AccountController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpPost]
     public async Task<IActionResult> RegisterAccount([FromBody] RegisterAccountCommandRequest request)
     {
-        var response = await _mediator.Send(request);
+        var response = await mediator.Send(request);
         return Ok(response);
     }
 }

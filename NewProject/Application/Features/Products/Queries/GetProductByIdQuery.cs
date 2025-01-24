@@ -10,17 +10,12 @@ public class GetProductByIdQuery : IRequest<GetProductQueryResponse?>
     public Guid Id { get; init; }
 }
 
-public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, GetProductQueryResponse?>
+public class GetProductByIdQueryHandler(IUnitOfWork unitOfWork)
+    : IRequestHandler<GetProductByIdQuery, GetProductQueryResponse?>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    public GetProductByIdQueryHandler(IUnitOfWork unitOfWork)
-    {
-        _unitOfWork = unitOfWork;
-    }
-
     public async Task<GetProductQueryResponse?> Handle(GetProductByIdQuery query, CancellationToken cancellationToken)
     {
-        var product = await _unitOfWork.ProductRepository.GetById(query.Id);
+        var product = await unitOfWork.ProductRepository.GetById(query.Id);
         if (product == null)
         {
             throw new ItemNotFoundException($"Product with ID {query.Id} not found");

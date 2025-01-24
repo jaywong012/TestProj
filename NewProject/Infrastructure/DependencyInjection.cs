@@ -6,28 +6,62 @@ using Infrastructure.Configurations;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 namespace Infrastructure;
 
 public static class DependencyInjection
 {
-    public static void ConfigurationWebHost(this WebApplicationBuilder builder)
+    public static void AddSwaggerConfiguration(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = configuration["JwtSettings:Key"],
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey,
+                BearerFormat = "JWT",
+                Scheme = "Bearer"
+            });
+
+            // Set the security requirements
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
+        });
+    }
+
+    public static void AddConfigurationWebHost(this WebApplicationBuilder builder)
     {
         var isContainerized = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
         if (isContainerized)
         {
-            builder.WebHost.UseKestrel(options =>
-            {
-                options.ListenAnyIP(7124, listenOptions =>
-                {
-                    listenOptions.UseHttps("/root/.aspnet/https/NewProject.pfx", "Test123");
-                });
-            });
+            //builder.WebHost.UseKestrel(options =>
+            //{
+            //    options.ListenAnyIP(7124, listenOptions =>
+            //    {
+            //        listenOptions.UseHttps("/root/.aspnet/https/NewProject.pfx", "Test123");
+            //    });
+            //});
         }
     }
 
@@ -47,7 +81,7 @@ public static class DependencyInjection
         services.AddScoped<ICategoryRepository, CategoryRepository>();
     }
 
-    public static void AddRateLimiterConfiguration(this IServiceCollection services, IConfiguration configuration)
+    public static void AddRateLimiterConfiguration(this IServiceCollection services)
     {
         services.AddRateLimiter(options =>
         {

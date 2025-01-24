@@ -7,21 +7,16 @@ namespace Application.Features.Accounts.Commands;
 
 public class RegisterAccountCommandRequest : IRequest<bool>
 {
-    public required string UserName { get; set; }
+    public required string UserName { get; init; }
 
-    public required string Password { get; set; }
+    public required string Password { get; init; }
 
-    public required string Role { get; set; }
+    public required string Role { get; init; }
 }
 
-public class RegisterAccountCommandRequestHandler : IRequestHandler<RegisterAccountCommandRequest, bool>
+public class RegisterAccountCommandRequestHandler(IUnitOfWork unitOfWork)
+    : IRequestHandler<RegisterAccountCommandRequest, bool>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    public RegisterAccountCommandRequestHandler(IUnitOfWork unitOfWork)
-    {
-        _unitOfWork = unitOfWork;
-    }
-
     public async Task<bool> Handle(RegisterAccountCommandRequest request, CancellationToken cancellationToken)
     {
         var hashedPassword = HashPassword.Hash(request.Password);
@@ -32,8 +27,8 @@ public class RegisterAccountCommandRequestHandler : IRequestHandler<RegisterAcco
             Hash = hashedPassword,
             Role = request.Role
         };
-        await _unitOfWork.AccountRepository.Add(account);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await unitOfWork.AccountRepository.Add(account);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return true;
     }

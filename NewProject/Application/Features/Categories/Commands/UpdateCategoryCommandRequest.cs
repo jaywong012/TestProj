@@ -5,28 +5,16 @@ using Domain.Interfaces;
 
 namespace Application.Features.Categories.Commands;
 
-public class UpdateCategoryCommandRequest : IRequest<bool>
+public class UpdateCategoryCommandRequest(string name) : IRequest<bool>
 {
-    public UpdateCategoryCommandRequest(string name)
-    {
-        Name = name;
-    }
-
     public Guid Id { get; set; }
 
-    public string Name { get; }
+    public string Name { get; } = name;
 }
 
-public class UpdateCategoryCommandRequestHandler : IRequestHandler<UpdateCategoryCommandRequest, bool>
+public class UpdateCategoryCommandRequestHandler(IUnitOfWork unitOfWork, IMediator mediator)
+    : IRequestHandler<UpdateCategoryCommandRequest, bool>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMediator _mediator;
-    public UpdateCategoryCommandRequestHandler(IUnitOfWork unitOfWork, IMediator mediator)
-    {
-        _unitOfWork = unitOfWork;
-        _mediator = mediator;
-    }
-
     public async Task<bool> Handle(UpdateCategoryCommandRequest request, CancellationToken cancellationToken)
     {
         Category category = new()
@@ -35,9 +23,9 @@ public class UpdateCategoryCommandRequestHandler : IRequestHandler<UpdateCategor
             Name = request.Name
         };
 
-        await _mediator.Send(new GetCategoryByIdQuery { Id = request.Id }, cancellationToken);
+        await mediator.Send(new GetCategoryByIdQuery { Id = request.Id }, cancellationToken);
 
-        await _unitOfWork.CategoryRepository.Update(category);
+        await unitOfWork.CategoryRepository.Update(category);
 
         return true;
     }

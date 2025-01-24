@@ -5,43 +5,28 @@ using Application.Features.Products.Queries;
 
 namespace Application.Features.Products.Commands;
 
-public class UpdateProductCommandRequest : IRequest<Product>
+public class UpdateProductCommandRequest(string name, decimal price, Guid? categoryId, Guid id)
+    : IRequest<Product>
 {
-    public UpdateProductCommandRequest(string name, decimal price, Guid? categoryId, Guid id)
-    {
-        Id = id;
-        Name = name;
-        Price = price;
-        CategoryId = categoryId;
-    }
+    public Guid Id { get; set; } = id;
 
-    public Guid Id { get; set; }
+    public string Name { get; } = name;
 
-    public string Name { get; }
+    public decimal Price { get; } = price;
 
-    public decimal Price { get; }
-
-    public Guid? CategoryId { get; set; }
+    public Guid? CategoryId { get; set; } = categoryId;
 }
 
-public class UpdateProductCommandRequestHandler : IRequestHandler<UpdateProductCommandRequest, Product>
+public class UpdateProductCommandRequestHandler(IUnitOfWork unitOfWork, IMediator mediator)
+    : IRequestHandler<UpdateProductCommandRequest, Product>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMediator _mediator;
-
-    public UpdateProductCommandRequestHandler(IUnitOfWork unitOfWork, IMediator mediator)
-    {
-        _unitOfWork = unitOfWork;
-        _mediator = mediator;
-    }
-
     public async Task<Product> Handle(UpdateProductCommandRequest request, CancellationToken cancellationToken)
     {
         GetProductByIdQuery existProductQuery = new()
         {
             Id = request.Id
         };
-        await _mediator.Send(existProductQuery, cancellationToken);
+        await mediator.Send(existProductQuery, cancellationToken);
 
         var categoryId = request.CategoryId == Guid.Empty ? null : request.CategoryId;
 
@@ -52,7 +37,7 @@ public class UpdateProductCommandRequestHandler : IRequestHandler<UpdateProductC
             Name = request.Name,
             CategoryId = categoryId
         };
-        await _unitOfWork.ProductRepository.Update(product);
+        await unitOfWork.ProductRepository.Update(product);
         return product;
     }
 }

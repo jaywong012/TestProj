@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json;
+using Application.Common;
 using Application.Features.Categories.Queries;
 using Domain.Entities;
 using Test.Configurations.IntegrationTest;
@@ -12,10 +13,10 @@ public class GetCategoriesById
     private readonly Guid _categoryId = Guid.Parse("A005FC52-5AE6-4400-4752-08DD2FB6F43A");
 
     [SetUp]
-    public void SetUp()
+    public async Task SetUp()
     {
         _configurations = InitConfigs.SetupInMemoryDatabase();
-        DbContextHelper.ClearEntities<Category>(_configurations.Context);
+        _configurations.Client = await InitConfigs.GenerateToken(_configurations.Client);
     }
 
     [TearDown]
@@ -28,7 +29,8 @@ public class GetCategoriesById
     public void GetCategoryById_EmptyList_ReturnNotFound()
     {
         if (_configurations == null) return;
-        var response = _configurations.Client.GetAsync($"api/category/{_categoryId}").Result;
+        DbContextHelper.ClearEntities<Category>(_configurations.Context);
+        var response = _configurations.Client.GetAsync($"{EndPointConstants.CATEGORY}/{_categoryId}").Result;
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
     }
 
@@ -41,7 +43,7 @@ public class GetCategoriesById
         var expectedCategory = _configurations.Context.Categories.FirstOrDefault(p => p.Id == _categoryId);
         Assert.That(expectedCategory, Is.Not.Null);
 
-        var response = _configurations.Client.GetAsync($"api/category/{_categoryId}").Result;
+        var response = _configurations.Client.GetAsync($"{EndPointConstants.CATEGORY}/{_categoryId}").Result;
         var responseBody = response.Content.ReadAsStringAsync().Result;
         var category = JsonSerializer.Deserialize<GetCategoryQueryResponse>(responseBody);
         Assert.Multiple(() =>

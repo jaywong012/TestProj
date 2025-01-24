@@ -4,10 +4,4 @@ using Infrastructure.Configurations;
 
 namespace Infrastructure.Repositories;
 
-public class AccountRepository : GenericRepository<Account>, IAccountRepository
-{
-
-    public AccountRepository(NewProjectDbContext context) : base(context)
-    {
-    }
-}
+public class AccountRepository(NewProjectDbContext context) : GenericRepository<Account>(context), IAccountRepository;

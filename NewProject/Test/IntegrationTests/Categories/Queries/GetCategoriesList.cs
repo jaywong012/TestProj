@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Application.Common;
 using Application.Features.Categories.Queries;
 using Domain.Entities;
 using Test.Configurations.IntegrationTest;
@@ -10,10 +11,10 @@ public class GetCategoriesList
     private InitConfigModel _configurations;
 
     [SetUp]
-    public void Setup()
+    public async Task Setup()
     {
         _configurations = InitConfigs.SetupInMemoryDatabase();
-        DbContextHelper.ClearEntities<Category>(_configurations.Context);
+        _configurations.Client = await InitConfigs.GenerateToken(_configurations.Client);
     }
 
     [TearDown]
@@ -25,7 +26,8 @@ public class GetCategoriesList
     [Test]
     public void GetAllCategories_EmptyList_ReturnEmpty()
     {
-        var response = _configurations.Client.GetAsync("api/category").Result;
+        DbContextHelper.ClearEntities<Category>(_configurations.Context);
+        var response = _configurations.Client.GetAsync(EndPointConstants.CATEGORY).Result;
         var responseBody = response.Content.ReadAsStringAsync().Result;
         var content = JsonSerializer.Deserialize<List<GetCategoryQueryResponse>>(responseBody);
         Assert.That(content, Is.Empty);
@@ -35,7 +37,7 @@ public class GetCategoriesList
     public void GetAllCategories_Has2Items_Return2Items()
     {
         SeedDatabase.SeedCategories(_configurations.Context);
-        var response = _configurations.Client.GetAsync("api/category").Result;
+        var response = _configurations.Client.GetAsync(EndPointConstants.CATEGORY).Result;
         var responseBody = response.Content.ReadAsStringAsync().Result;
         var content = JsonSerializer.Deserialize<List<GetCategoryQueryResponse>>(responseBody);
         Assert.That(content, Is.Not.Null);

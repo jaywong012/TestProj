@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json;
+using Application.Common;
 using Application.Features.Products.Queries;
 using Domain.Entities;
 using Test.Configurations.IntegrationTest;
@@ -12,10 +13,10 @@ public class GetCategoriesById
     private readonly Guid _productId = Guid.Parse("A005FC52-5AE6-4400-4752-08DD2FB6F43C");
 
     [SetUp]
-    public void SetUp()
+    public async Task SetUp()
     {
         _configurations = InitConfigs.SetupInMemoryDatabase();
-        DbContextHelper.ClearEntities<Product>(_configurations.Context);
+        _configurations.Client = await InitConfigs.GenerateToken(_configurations.Client);
     }
 
     [TearDown]
@@ -27,7 +28,8 @@ public class GetCategoriesById
     [Test]
     public void GetProductById_EmptyList_ReturnNotFound()
     {
-        var response = _configurations.Client.GetAsync($"api/product/{_productId}").Result;
+        DbContextHelper.ClearEntities<Product>(_configurations.Context);
+        var response = _configurations.Client.GetAsync($"{EndPointConstants.PRODUCT}/{_productId}").Result;
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
     }
 
@@ -35,11 +37,10 @@ public class GetCategoriesById
     public void GetProductById_FoundItem_ReturnCorrectItem()
     {
         SeedDatabase.SeedProducts(_configurations.Context);
-
         var expectedProduct = _configurations.Context.Products?.FirstOrDefault(p => p.Id == _productId);
         Assert.That(expectedProduct, Is.Not.Null);
 
-        var response = _configurations.Client.GetAsync($"api/product/{_productId}").Result;
+        var response = _configurations.Client.GetAsync($"{EndPointConstants.PRODUCT}/{_productId}").Result;
         var responseBody = response.Content.ReadAsStringAsync().Result;
         var product = JsonSerializer.Deserialize<GetProductQueryResponse>(responseBody);
         Assert.Multiple(() =>

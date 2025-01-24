@@ -15,9 +15,9 @@ services:
     ports:
       - "7124:7124"
     environment:
-      ASPNETCORE_URLS: https://0.0.0.0:7124
+      ASPNETCORE_URLS: http://0.0.0.0:7124
       ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__DefaultConnection: "Server=host.docker.internal;Database=NewProject;Trusted_Connection=True;TrustServerCertificate=True;"
+      ConnectionStrings__DefaultConnection: "Server=host.docker.internal;Database=NewProject;User Id=jaytest;Password=123;TrustServerCertificate=True;"
       JwtSettings__Key: "Tfn5CT8TQcCD1tXCvQj0ceYQsPEWWb0a"
-    volumes:
-      - ~/.aspnet/https:/root/.aspnet/https:ro
+    # volumes:
+    #   - ~/.aspnet/https:/root/.aspnet/https:ro
