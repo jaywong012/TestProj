@@ -1,8 +1,5 @@
-﻿using System.Text;
-using System.Text.Json;
-using Application.Common;
+﻿using Application.Common;
 using Application.Features.Products.Commands;
-using Domain.Entities;
 using Test.Configurations.IntegrationTest;
 
 namespace Test.IntegrationTests.Products.Commands;
@@ -10,12 +7,18 @@ namespace Test.IntegrationTests.Products.Commands;
 public class AddProduct
 {
     private InitConfigModel _configurations;
+    private CreateProductCommandRequest _request;
 
     [SetUp]
-    public void SetUp()
+    public async Task SetUp()
     {
         _configurations = InitConfigs.SetupInMemoryDatabase();
-        DbContextHelper.ClearEntities<Product>(_configurations.Context);
+        _request = new CreateProductCommandRequest
+        {
+            Name = "CoCa",
+            Price = 20
+        };
+        _configurations.Client = await InitConfigs.GenerateToken(_configurations.Client);
     }
 
     [TearDown]
@@ -27,15 +30,9 @@ public class AddProduct
     [Test]
     public async Task UpdateProduct_UpdateAllFields_ProductHasBeenUpdated()
     {
-        CreateProductCommandRequest product = new()
-        {
-            Name = "CoCa",
-            Price = 20
-        };
-        var jsonContent = new StringContent(JsonSerializer.Serialize(product), Encoding.UTF8, Constants.APPLICATION_JSON);
+        var jsonContent = Utilities.SerializeToJsonContent(_request);
 
-
-        var postResponse = await _configurations.Client.PostAsync("api/product", jsonContent);
+        var postResponse = await _configurations.Client.PostAsync(EndPointConstants.PRODUCT, jsonContent);
         postResponse.EnsureSuccessStatusCode();
     }
 }

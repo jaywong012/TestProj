@@ -18,18 +18,11 @@ public class GenerateJwtTokenCommandRequest : IRequest<string>
     public required string Password { get; set; }
 }
 
-public class GenerateJwtTokenCommandRequestHandler : IRequestHandler<GenerateJwtTokenCommandRequest, string>
+public class GenerateJwtTokenCommandRequestHandler(
+    IOptions<JwtSettings> jwtSettings,
+    IMediator mediator) : IRequestHandler<GenerateJwtTokenCommandRequest, string>
 {
-    private readonly string _key;
-    private readonly IMediator _mediator;
-    public GenerateJwtTokenCommandRequestHandler(
-        IOptions<JwtSettings> jwtSettings,
-        IMediator mediator
-    )
-    {
-        _key = jwtSettings.Value.Key;
-        _mediator = mediator;
-    }
+    private readonly string _key = jwtSettings.Value.Key;
 
     public async Task<string> Handle(GenerateJwtTokenCommandRequest request, CancellationToken cancellationToken)
     {
@@ -37,7 +30,7 @@ public class GenerateJwtTokenCommandRequestHandler : IRequestHandler<GenerateJwt
         {
             UserName = request.UserName
         };
-        var user = await _mediator.Send(userQuery, cancellationToken);
+        var user = await mediator.Send(userQuery, cancellationToken);
         if (!BCrypt.Net.BCrypt.Verify(request.Password, user.Hash))
         {
             throw new UnAuthorizeException("Invalid username or password.");
@@ -47,11 +40,10 @@ public class GenerateJwtTokenCommandRequestHandler : IRequestHandler<GenerateJwt
         var encodeKey = Encoding.ASCII.GetBytes(_key);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[]
-            {
+            Subject = new ClaimsIdentity([
                 new Claim(ClaimTypes.Name, request.UserName),
                 new Claim(ClaimTypes.Role, Constants.ADMIN)
-            }),
+            ]),
             Expires = DateTime.UtcNow.AddYears(1),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(encodeKey),
                 SecurityAlgorithms.HmacSha256Signature)

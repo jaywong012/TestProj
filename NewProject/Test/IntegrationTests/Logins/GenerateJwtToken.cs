@@ -1,6 +1,4 @@
 ﻿using System.Net;
-using System.Text;
-using System.Text.Json;
 using Application.Common;
 using Application.Features.Logins.Commands;
 using Test.Configurations.IntegrationTest;
@@ -16,7 +14,7 @@ public class GenerateJwtToken
     public void SetUp()
     {
         _configurations = InitConfigs.SetupInMemoryDatabase();
-        _request = new GenerateJwtTokenCommandRequest()
+        _request = new GenerateJwtTokenCommandRequest
         {
             UserName = "jac",
             Password = "1234"
@@ -28,8 +26,8 @@ public class GenerateJwtToken
     {
         SeedDatabase.SeedAccounts(_configurations.Context);
 
-        var jsonContent = new StringContent(JsonSerializer.Serialize(_request), Encoding.UTF8, Constants.APPLICATION_JSON);
-        var loginResponse = await _configurations.Client.PostAsync("api/Login", jsonContent);
+        var jsonContent = Utilities.SerializeToJsonContent(_request);
+        var loginResponse = await _configurations.Client.PostAsync(EndPointConstants.LOGIN, jsonContent);
         Assert.That(loginResponse.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));
     }
 }

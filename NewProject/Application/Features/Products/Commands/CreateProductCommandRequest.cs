@@ -9,23 +9,17 @@ public class CreateProductCommandRequest : IRequest
 {
     [Required(ErrorMessage = "Name is required")]
     [StringLength(100, ErrorMessage = "Name must not exceed 100 characters")]
-    public required string Name { get; set; }
+    public required string Name { get; init; }
 
     [Required(ErrorMessage = "Price is required")]
     [Range(1, 1_000_000_000, ErrorMessage = "Price must between 1 and 1 billion")]
-    public decimal Price { get; set; }
+    public decimal Price { get; init; }
 
-    public Guid? CategoryId { get; set; }
+    public Guid? CategoryId { get; }
 }
 
-public class CreateProductCommandRequestHandler : IRequestHandler<CreateProductCommandRequest>
+public class CreateProductCommandRequestHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateProductCommandRequest>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    public CreateProductCommandRequestHandler(IUnitOfWork unitOfWork)
-    {
-        _unitOfWork = unitOfWork;
-    }
-
     public async Task Handle(CreateProductCommandRequest request, CancellationToken cancellationToken)
     {
         var categoryId = request.CategoryId == Guid.Empty ? null : request.CategoryId;
@@ -37,6 +31,6 @@ public class CreateProductCommandRequestHandler : IRequestHandler<CreateProductC
             Price = request.Price, 
             CategoryId = categoryId
         };
-        await _unitOfWork.ProductRepository.Add(product);
+        await unitOfWork.ProductRepository.Add(product);
     }
 }

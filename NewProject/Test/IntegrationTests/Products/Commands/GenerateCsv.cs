@@ -1,44 +1,43 @@
 ﻿using System.Net;
+using Application.Common;
 using Application.Features.Products.Commands;
-using Domain.Entities;
 using Test.Configurations.IntegrationTest;
 
 namespace Test.IntegrationTests.Products.Commands;
 
 public class GenerateCsv
 {
-    private InitConfigModel _initConfigModel;
+    private InitConfigModel _configurations;
     private GenerateCsvCommandRequest _request;
 
     [SetUp]
-    public void SetUp()
+    public async Task SetUp()
     {
-        _initConfigModel = InitConfigs.SetupInMemoryDatabase();
+        _configurations = InitConfigs.SetupInMemoryDatabase();
+        SeedDatabase.SeedProducts(_configurations.Context);
         _request = new GenerateCsvCommandRequest();
-        DbContextHelper.ClearEntities<Product>(_initConfigModel.Context);
+        _configurations.Client = await InitConfigs.GenerateToken(_configurations.Client);
     }
 
     [TearDown]
     public void TearDown()
     {
-        _initConfigModel.Dispose();
+        _configurations.Dispose();
     }
 
     [Test]
     public async Task GenerateCsv_EmptySearchKey_GenerateReport()
     {
-        SeedDatabase.SeedProducts(_initConfigModel.Context);
-        var response = await _initConfigModel.Client.GetAsync("api/product/generate-csv");
+        var response = await _configurations.Client.GetAsync($"{EndPointConstants.PRODUCT_GENERATE_CSV}");
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
     }
 
     [Test]
     public async Task GenerateCsv_HaveSearchKey_GenerateReportWithFilter()
     {
-        SeedDatabase.SeedProducts(_initConfigModel.Context);
         _request.SearchKey = "Coca";
 
-        var response = await _initConfigModel.Client.GetAsync($"api/product/generate-csv?{_request.SearchKey}");
+        var response = await _configurations.Client.GetAsync($"{EndPointConstants.PRODUCT_GENERATE_CSV}?{_request.SearchKey}");
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
     }
 }

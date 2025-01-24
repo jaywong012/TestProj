@@ -1,8 +1,3 @@
 ﻿namespace Domain.ErrorHandlingManagement;
 
-public class UnAuthorizeException : Exception
-{
-    public UnAuthorizeException(string message) : base(message)
-    {
-    }
-}
+public class UnAuthorizeException(string message) : Exception(message);

@@ -1,6 +1,4 @@
-﻿using System.Text;
-using System.Text.Json;
-using Application.Common;
+﻿using Application.Common;
 using Application.Features.Accounts.Commands;
 using Test.Configurations.IntegrationTest;
 
@@ -15,7 +13,7 @@ public class RegisterAccount
     public void SetUp()
     {
         _configurationsModel = InitConfigs.SetupInMemoryDatabase();
-        _request = new RegisterAccountCommandRequest()
+        _request = new RegisterAccountCommandRequest
         {
             Password = "Test123",
             Role = Constants.ADMIN,
@@ -33,8 +31,8 @@ public class RegisterAccount
     [Test]
     public async Task Test()
     {
-        var jsonContent = new StringContent(JsonSerializer.Serialize(_request), Encoding.UTF8, Constants.APPLICATION_JSON);
-        var result = await _configurationsModel.Client.PostAsync("api/account", jsonContent);
+        var jsonContent = Utilities.SerializeToJsonContent(_request);
+        var result = await _configurationsModel.Client.PostAsync(EndPointConstants.ACCOUNT, jsonContent);
 
         Assert.That(result.IsSuccessStatusCode);
     }

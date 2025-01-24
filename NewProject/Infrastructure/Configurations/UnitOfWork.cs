@@ -4,17 +4,12 @@ using Infrastructure.Repositories;
 
 namespace Infrastructure.Configurations;
 
-public class UnitOfWork : IUnitOfWork, IDisposable
+public class UnitOfWork(NewProjectDbContext dbContext) : IUnitOfWork, IDisposable
 {
-    private readonly NewProjectDbContext _dbContext;
+    private readonly NewProjectDbContext _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
     private IProductRepository? _productRepository;
     private ICategoryRepository? _categoryRepository;
     private IAccountRepository? _accountRepository;
-
-    public UnitOfWork(NewProjectDbContext dbContext)
-    {
-        _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-    }
 
     public IProductRepository ProductRepository =>
         _productRepository ??= new ProductRepository(_dbContext);

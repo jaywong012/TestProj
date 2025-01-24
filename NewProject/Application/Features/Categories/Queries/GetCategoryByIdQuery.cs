@@ -10,17 +10,12 @@ public class GetCategoryByIdQuery : IRequest<GetCategoryQueryResponse>
     public Guid Id { get; init; }
 }
 
-public class GetCategoryByIdQueryHandler : IRequestHandler<GetCategoryByIdQuery, GetCategoryQueryResponse>
+public class GetCategoryByIdQueryHandler(IUnitOfWork unitOfWork)
+    : IRequestHandler<GetCategoryByIdQuery, GetCategoryQueryResponse>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    public GetCategoryByIdQueryHandler(IUnitOfWork unitOfWork)
-    {
-        _unitOfWork = unitOfWork;
-    }
-
     public async Task<GetCategoryQueryResponse> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
     {
-        var existCategory = await _unitOfWork
+        var existCategory = await unitOfWork
             .CategoryRepository
             .GetById(request.Id);
 

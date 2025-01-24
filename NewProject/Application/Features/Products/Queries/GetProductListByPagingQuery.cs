@@ -7,22 +7,17 @@ namespace Application.Features.Products.Queries;
 
 public class GetProductListByPagingQuery : IRequest<PagedProductListResponse>
 {
-    public string? SearchKey { get; set; }
+    public string? SearchKey { get; init; }
     public int PageIndex { get; init; }
     public int PageSize { get; init; } = 10;
 }
 
-public class GetProductListByPagingQueryHandler : IRequestHandler<GetProductListByPagingQuery, PagedProductListResponse>
+public class GetProductListByPagingQueryHandler(IUnitOfWork unitOfWork)
+    : IRequestHandler<GetProductListByPagingQuery, PagedProductListResponse>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    public GetProductListByPagingQueryHandler(IUnitOfWork unitOfWork)
-    {
-        _unitOfWork = unitOfWork;
-    }
-
     public Task<PagedProductListResponse> Handle(GetProductListByPagingQuery query, CancellationToken cancellationToken)
     {
-        var productsQuery = _unitOfWork
+        var productsQuery = unitOfWork
             .ProductRepository
             .GetAll();
 
@@ -50,6 +45,7 @@ public class GetProductListByPagingQueryHandler : IRequestHandler<GetProductList
                 CategoryName = p.Category != null ? p.Category.Name : "",
                 LastSavedTime = FormatDateTime.HH_mm_MMM_dd(p.LastSavedTime)
             });
+
 
         PagedProductListResponse response = new()
         {

@@ -10,17 +10,12 @@ public class GetProductListQuery : IRequest<List<GetProductQueryResponse>>
     public string? SearchKey { get; set; }
 }
 
-public class GetProductListRequestHandler : IRequestHandler<GetProductListQuery, List<GetProductQueryResponse>>
+public class GetProductListRequestHandler(IUnitOfWork unitOfWork)
+    : IRequestHandler<GetProductListQuery, List<GetProductQueryResponse>>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    public GetProductListRequestHandler(IUnitOfWork unitOfWork)
-    {
-        _unitOfWork = unitOfWork;
-    }
-
     public Task<List<GetProductQueryResponse>> Handle(GetProductListQuery query, CancellationToken cancellationToken)
     {
-        var productListQuery = _unitOfWork
+        var productListQuery = unitOfWork
             .ProductRepository
             .GetAll();
 

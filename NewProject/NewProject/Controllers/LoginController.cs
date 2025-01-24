@@ -6,18 +6,12 @@ namespace NewProject.APIs.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class LoginController : ControllerBase
+public class LoginController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-    public LoginController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpPost]
     public async Task<IActionResult> Login([FromBody] GenerateJwtTokenCommandRequest request)
     {
-        var response = await _mediator.Send(request);
+        var response = await mediator.Send(request);
         return Ok(response);
     }
 }

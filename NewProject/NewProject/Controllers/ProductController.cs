@@ -9,46 +9,39 @@ namespace NewProject.APIs.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ProductController : ControllerBase
+[Authorize(Policy = "AdminPolicy")]
+public class ProductController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public ProductController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpGet]
     public async Task<IActionResult> GetListProduct([FromQuery] GetProductListQuery query)
     {
-        var response = await _mediator.Send(query);
+        var response = await mediator.Send(query);
         return Ok(response);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetProductById(Guid id)
     {
         GetProductByIdQuery query = new()
         {
             Id = id
         };
-        var response = await _mediator.Send(query);
+        var response = await mediator.Send(query);
 
         return Ok(response);
     }
 
     [HttpGet("paged")]
-    [Authorize(Policy = "AdminPolicy")]
     public async Task<IActionResult> GetProductListByPaging([FromQuery] GetProductListByPagingQuery request)
     {
-        var response = await _mediator.Send(request);
+        var response = await mediator.Send(request);
         return Ok(response);
     }
 
     [HttpGet("generate-csv")]
     public async Task<IActionResult> GenerateCsv([FromQuery] GenerateCsvCommandRequest request)
     {
-        var response = await _mediator.Send(request);
+        var response = await mediator.Send(request);
         var byteArray = Encoding.UTF8.GetBytes(response);
         var stream = new MemoryStream(byteArray);
 
@@ -62,21 +55,21 @@ public class ProductController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductCommandRequest request)
     {
-        await _mediator.Send(request);
+        await mediator.Send(request);
 
         return Ok();
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductCommandRequest request)
     {
         request.Id = id;
-        var response = await _mediator.Send(request);
+        var response = await mediator.Send(request);
 
         return Ok(response);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteProduct(Guid id)
     {
         DeleteProductCommandRequest request = new()
@@ -84,7 +77,7 @@ public class ProductController : ControllerBase
             Id = id
         };
 
-        var response = await _mediator.Send(request);
+        var response = await mediator.Send(request);
 
         return Ok(response);
     }

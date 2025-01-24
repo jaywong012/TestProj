@@ -1,6 +1,6 @@
 ﻿using System.Net;
+using Application.Common;
 using Application.Features.Categories.Commands;
-using Domain.Entities;
 using Test.Configurations.IntegrationTest;
 
 namespace Test.IntegrationTests.Categories.Commands;
@@ -11,14 +11,14 @@ public class DeleteCategoryById
     private DeleteCategoryCommandRequest _request;
 
     [SetUp]
-    public void SetUp()
+    public async Task SetUp()
     {
         _configurations = InitConfigs.SetupInMemoryDatabase();
-        DbContextHelper.ClearEntities<Category>(_configurations.Context);
         _request = new DeleteCategoryCommandRequest
         {
             Id = Guid.Parse("A005FC52-5AE6-4400-4752-08DD2FB6F43A")
         };
+        _configurations.Client = await InitConfigs.GenerateToken(_configurations.Client);
     }
 
     [TearDown]
@@ -32,7 +32,7 @@ public class DeleteCategoryById
     {
         if (_configurations == null) return;
         var categoryId = _request.Id;
-        var category = await _configurations.Client.GetAsync($"api/category/{categoryId}");
+        var category = await _configurations.Client.GetAsync($"{EndPointConstants.CATEGORY}/{categoryId}");
         Assert.That(category.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
     }
 
@@ -42,11 +42,11 @@ public class DeleteCategoryById
         if (_configurations == null) return;
         var categoryId = _request.Id;
         SeedDatabase.SeedCategories(_configurations.Context);
-        var category = await _configurations.Client.GetAsync($"api/category/{categoryId}");
+        var category = await _configurations.Client.GetAsync($"{EndPointConstants.CATEGORY}/{categoryId}");
         Assert.That(category, Is.Not.Null);
 
-        await _configurations.Client.DeleteAsync($"api/category/{categoryId}");
-        var deletedCategory = await _configurations.Client.GetAsync($"api/category/{categoryId}");
+        await _configurations.Client.DeleteAsync($"{EndPointConstants.CATEGORY}/{categoryId}");
+        var deletedCategory = await _configurations.Client.GetAsync($"{EndPointConstants.CATEGORY}/{categoryId}");
         Assert.That(deletedCategory.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
     }
 }
