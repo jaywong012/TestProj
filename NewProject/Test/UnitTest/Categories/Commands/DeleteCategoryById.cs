@@ -16,7 +16,7 @@ public class DeleteCategoryById
     public void SetUp()
     {
         _mockUnitOfWork = new Mock<IUnitOfWork>();
-        _request = new DeleteCategoryCommandRequest()
+        _request = new DeleteCategoryCommandRequest
         {
             Id = Guid.Parse("A005FC52-5AE6-4400-4752-08DD2FB6F43B")
         };

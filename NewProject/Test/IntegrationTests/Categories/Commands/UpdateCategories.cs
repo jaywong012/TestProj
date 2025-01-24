@@ -2,6 +2,7 @@
 using System.Text.Json;
 using Application.Common;
 using Application.Features.Categories.Queries;
+using Application.Utilities;
 using Test.Configurations.IntegrationTest;
 
 namespace Test.IntegrationTests.Categories.Commands;
@@ -48,7 +49,7 @@ public class UpdateCategories
 
         if (category != null)
         {
-            var jsonContent = Utilities.SerializeToJsonContent(category);
+            var jsonContent = CustomJsonFormat.SerializeToJsonContent(category);
 
 
             var putResponse = await _configurations.Client.PutAsync($"{EndPointConstants.CATEGORY}/{_categoryId}", jsonContent);

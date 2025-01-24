@@ -2,7 +2,4 @@
 
 namespace Domain.Interfaces.IRepositories;
 
-public interface IProductRepository : IGenericRepository<Product>
-{
-
-}
+public interface IProductRepository : IGenericRepository<Product>;

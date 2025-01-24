@@ -60,8 +60,8 @@ public class GetProductListByPagingQueryHandler(IUnitOfWork unitOfWork)
 public class PagedProductListResponse
 {
     [JsonPropertyName("products")]
-    public required IEnumerable<GetProductQueryResponse> Products { get; set; }
+    public required IEnumerable<GetProductQueryResponse> Products { get; init; }
 
     [JsonPropertyName("totalPages")]
-    public int TotalPages { get; set; }
+    public int TotalPages { get; init; }
 }

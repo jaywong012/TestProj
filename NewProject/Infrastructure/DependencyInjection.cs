@@ -6,6 +6,7 @@ using Infrastructure.Configurations;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -55,13 +56,13 @@ public static class DependencyInjection
         var isContainerized = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
         if (isContainerized)
         {
-            //builder.WebHost.UseKestrel(options =>
-            //{
-            //    options.ListenAnyIP(7124, listenOptions =>
-            //    {
-            //        listenOptions.UseHttps("/root/.aspnet/https/NewProject.pfx", "Test123");
-            //    });
-            //});
+            builder.WebHost.UseKestrel(_ =>
+            {
+                //options.ListenAnyIP(7124, listenOptions =>
+                //{
+                //    listenOptions.UseHttps("/root/.aspnet/https/NewProject.pfx", "Test123");
+                //});
+            });
         }
     }
 
@@ -88,7 +89,7 @@ public static class DependencyInjection
             options.AddPolicy("IpPolicy", context =>
                 RateLimitPartition.Get(
                     partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
-                    factory: key => new FixedWindowRateLimiter(new FixedWindowRateLimiterOptions
+                    factory: _ => new FixedWindowRateLimiter(new FixedWindowRateLimiterOptions
                     {
                         PermitLimit = 10,
                         Window = TimeSpan.FromMinutes(1),

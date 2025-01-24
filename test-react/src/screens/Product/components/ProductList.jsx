@@ -45,7 +45,7 @@ const ProductList = ({
         <td className="text-overflow-ellipse max-width-100 text-end">
           {formatNumber(product.price)}
         </td>
-        <td className="text-overflow-ellipse max-width-100">
+        <td className="text-overflow-ellipse max-width-100 text-center">
           {product.categoryName}
         </td>
         <td className="text-overflow-ellipse max-width-100 text-center">

@@ -1,5 +1,6 @@
 ﻿using Application.Common;
 using Application.Features.Accounts.Commands;
+using Application.Utilities;
 using Test.Configurations.IntegrationTest;
 
 namespace Test.IntegrationTests.Accounts.Commands;
@@ -31,7 +32,7 @@ public class RegisterAccount
     [Test]
     public async Task Test()
     {
-        var jsonContent = Utilities.SerializeToJsonContent(_request);
+        var jsonContent = CustomJsonFormat.SerializeToJsonContent(_request);
         var result = await _configurationsModel.Client.PostAsync(EndPointConstants.ACCOUNT, jsonContent);
 
         Assert.That(result.IsSuccessStatusCode);

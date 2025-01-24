@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http.Headers;
+using Application.Utilities;
 
 namespace Test.Configurations.IntegrationTest;
 
@@ -77,7 +78,7 @@ public static class InitConfigs
             Password = "123"
         };
 
-        var jsonContent = Utilities.SerializeToJsonContent(loginRequest);
+        var jsonContent = CustomJsonFormat.SerializeToJsonContent(loginRequest);
         var loginResponse = await client.PostAsync("api/Login", jsonContent);
         loginResponse.EnsureSuccessStatusCode();
         var jwtToken = loginResponse.Content.ReadAsStringAsync().Result;

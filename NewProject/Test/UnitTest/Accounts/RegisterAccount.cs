@@ -15,7 +15,7 @@ public class RegisterAccount
     [SetUp]
     public void SetUp()
     {
-        _request = new RegisterAccountCommandRequest()
+        _request = new RegisterAccountCommandRequest
         {
             Password = "Test123",
             Role = Constants.ADMIN,

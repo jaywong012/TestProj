@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Application.Common;
 using Application.Features.Logins.Commands;
+using Application.Utilities;
 using Test.Configurations.IntegrationTest;
 
 namespace Test.IntegrationTests.Logins;
@@ -26,7 +27,7 @@ public class GenerateJwtToken
     {
         SeedDatabase.SeedAccounts(_configurations.Context);
 
-        var jsonContent = Utilities.SerializeToJsonContent(_request);
+        var jsonContent = CustomJsonFormat.SerializeToJsonContent(_request);
         var loginResponse = await _configurations.Client.PostAsync(EndPointConstants.LOGIN, jsonContent);
         Assert.That(loginResponse.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));
     }
