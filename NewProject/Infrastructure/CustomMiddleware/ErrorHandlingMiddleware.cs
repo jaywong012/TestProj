@@ -42,8 +42,8 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
 
 public static class ErrorHandlingMiddlewareExtensions
 {
-    public static IApplicationBuilder UseErrorHandling(this IApplicationBuilder builder)
+    public static void UseErrorHandling(this IApplicationBuilder builder)
     {
-        return builder.UseMiddleware<ErrorHandlingMiddleware>();
+        builder.UseMiddleware<ErrorHandlingMiddleware>();
     }
 }

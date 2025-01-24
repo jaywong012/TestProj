@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import CustomTitle from "../CustomTitle/CustomTitle";
 import SpinnerComponent from "../Spinner/Spinner";
-import { Table, Form, Row, Col, Button } from "react-bootstrap";
+import { Table, Form, Row, Col, Button, Container } from "react-bootstrap";
 import { Download, Pencil, Trash } from "react-bootstrap-icons";
 import PaginationComponent from "../PaginationComponent/PaginationComponent";
 import "./CustomTable.scss";
@@ -30,7 +30,7 @@ const CustomTable = ({
   };
   const placeholderCount = 10 - itemArray?.length;
   return (
-    <>
+    <Container>
       <div
         style={{
           display: "flex",
@@ -96,7 +96,7 @@ const CustomTable = ({
           )}
         </>
       )}
-    </>
+    </Container>
   );
 };
 

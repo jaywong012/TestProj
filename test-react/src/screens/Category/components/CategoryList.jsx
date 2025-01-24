@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import PropTypes from "prop-types";
 import CustomTable from "@/components/CustomTable/CustomTable";
 
@@ -8,14 +8,26 @@ const CategoryList = ({
   handleDelete,
   loading,
 }) => {
+  const header = useMemo(
+    () => [
+      { name: "Name", width: "60%" },
+      { name: "Updated Time", width: "20%" },
+    ],
+    []
+  );
   const renderCategory = (category) => {
     return (
-      <td className="text-overflow-ellipse max-width-100">{category.name}</td>
+      <>
+        <td className="text-overflow-ellipse max-width-100">{category.name}</td>
+        <td className="text-overflow-ellipse max-width-100 text-center">
+          {category.lastSavedTime}
+        </td>
+      </>
     );
   };
   return (
     <CustomTable
-      headerArray={[{ name: "Name", width: "90%" }]}
+      headerArray={header}
       handleDelete={handleDelete}
       handleSetEditDetail={handleSetEditDetail}
       itemArray={categories}

@@ -1,5 +1,6 @@
 ﻿using Application.Common;
 using Application.Features.Products.Commands;
+using Application.Utilities;
 using Test.Configurations.IntegrationTest;
 
 namespace Test.IntegrationTests.Products.Commands;
@@ -30,7 +31,7 @@ public class AddProduct
     [Test]
     public async Task UpdateProduct_UpdateAllFields_ProductHasBeenUpdated()
     {
-        var jsonContent = Utilities.SerializeToJsonContent(_request);
+        var jsonContent = CustomJsonFormat.SerializeToJsonContent(_request);
 
         var postResponse = await _configurations.Client.PostAsync(EndPointConstants.PRODUCT, jsonContent);
         postResponse.EnsureSuccessStatusCode();

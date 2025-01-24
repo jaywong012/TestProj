@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Col, Form, Row } from "react-bootstrap";
+import { Col, Container, Form, Row } from "react-bootstrap";
 import CustomButton from "@/components/CustomButton/CustomButton";
 import { action } from "@/constants/common";
 
@@ -22,7 +22,7 @@ const AddEditProduct = ({
   }, [editId]);
 
   return (
-    <div>
+    <Container>
       <h3>Product</h3>
       <Form
         className="add-edit-product-form"
@@ -83,13 +83,17 @@ const AddEditProduct = ({
             </Col>
           </Form.Group>
         </div>
-        <CustomButton
-          action={editId ? action.EDIT : action.ADD}
-          type={"submit"}
-        />
-        {editId && <CustomButton action={action.CANCEL} onClick={cancelEdit} />}
+        <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+          <CustomButton
+            action={editId ? action.EDIT : action.ADD}
+            type={"submit"}
+          />
+          {editId && (
+            <CustomButton action={action.CANCEL} onClick={cancelEdit} />
+          )}
+        </div>
       </Form>
-    </div>
+    </Container>
   );
 };
 AddEditProduct.propTypes = {

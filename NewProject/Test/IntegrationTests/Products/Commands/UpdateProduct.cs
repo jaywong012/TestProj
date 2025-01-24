@@ -3,6 +3,7 @@ using System.Text.Json;
 using Application.Common;
 using Application.Features.Products.Commands;
 using Application.Features.Products.Queries;
+using Application.Utilities;
 using Domain.Entities;
 using Test.Configurations.IntegrationTest;
 
@@ -36,7 +37,7 @@ public class UpdateProduct
     {
         DbContextHelper.ClearEntities<Product>(_configurations.Context);
         var productId = _request.Id;
-        var jsonContent = Utilities.SerializeToJsonContent(_request);
+        var jsonContent = CustomJsonFormat.SerializeToJsonContent(_request);
 
         var putResponse = await _configurations.Client.PutAsync($"{EndPointConstants.PRODUCT}/{productId}", jsonContent);
         Assert.That(putResponse.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
@@ -48,7 +49,7 @@ public class UpdateProduct
         DbContextHelper.ClearEntities<Product>(_configurations.Context);
         _request.CategoryId = Guid.Empty;
 
-        var jsonContent = Utilities.SerializeToJsonContent(_request);
+        var jsonContent = CustomJsonFormat.SerializeToJsonContent(_request);
 
         var putResponse = await _configurations.Client.PutAsync($"{EndPointConstants.PRODUCT}/{_request.Id}", jsonContent);
         Assert.That(putResponse.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
@@ -71,7 +72,7 @@ public class UpdateProduct
 
         if (product != null)
         {
-            var jsonContent = Utilities.SerializeToJsonContent(product);
+            var jsonContent = CustomJsonFormat.SerializeToJsonContent(product);
 
             var putResponse = await _configurations.Client.PutAsync($"{EndPointConstants.PRODUCT}/{_request.Id}", jsonContent);
             putResponse.EnsureSuccessStatusCode();

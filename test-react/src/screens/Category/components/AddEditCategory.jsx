@@ -1,7 +1,7 @@
 import CustomButton from "@/components/CustomButton/CustomButton";
 import { action } from "@/constants/common";
 import React from "react";
-import { Col, Form, Row } from "react-bootstrap";
+import { Col, Container, Form, Row } from "react-bootstrap";
 
 const AddEditCategory = ({
     categoryName,
@@ -12,7 +12,7 @@ const AddEditCategory = ({
     cancelEdit
 }) => {
   return (
-    <div>
+    <Container>
       <h3>Category</h3>
       <Form onSubmit={editId ? handleEdit : handleAdd}>
         <Form.Group as={Row} className="mb-3" controlId="categoryName">
@@ -30,7 +30,7 @@ const AddEditCategory = ({
         <CustomButton action={editId ? action.EDIT : action.ADD} type={"submit"} />
         {editId && <CustomButton action={action.CANCEL} onClick={cancelEdit} />}
       </Form>
-    </div>
+    </Container>
   );
 };
 

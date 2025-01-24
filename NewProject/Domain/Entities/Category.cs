@@ -8,5 +8,6 @@ public class Category : BaseModel
     [Required]
     public required string Name { get; set; }
 
+    // ReSharper disable once CollectionNeverUpdated.Global
     public ICollection<Product>? Products { get; init; }
 }

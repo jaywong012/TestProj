@@ -7,7 +7,7 @@ namespace Application.Features.Products.Queries;
 
 public class GetProductListQuery : IRequest<List<GetProductQueryResponse>>
 {
-    public string? SearchKey { get; set; }
+    public string? SearchKey { get; init; }
 }
 
 public class GetProductListRequestHandler(IUnitOfWork unitOfWork)
@@ -43,7 +43,7 @@ public class GetProductListRequestHandler(IUnitOfWork unitOfWork)
 public class GetProductQueryResponse
 {
     [JsonPropertyName("id")]
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
     [JsonPropertyName("name")]
     public required string Name { get; set; }
@@ -58,7 +58,7 @@ public class GetProductQueryResponse
     public DateTime? CreatedTime { get; init; }
 
     [JsonPropertyName("categoryName")]
-    public string? CategoryName { get; set; }
+    public string? CategoryName { get; init; }
 
     [JsonPropertyName("price")]
     public int Price { get; set; }

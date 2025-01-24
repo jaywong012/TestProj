@@ -7,7 +7,7 @@ namespace Application.Features.Accounts.Commands;
 
 public class GetAccountByUserNameCommandRequest : IRequest<Account>
 {
-    public required string UserName { get; set; }
+    public required string UserName { get; init; }
 }
 
 public class GetAccountByUserNameCommandRequestHandler(IUnitOfWork unitOfWork)

@@ -1,5 +1,6 @@
 ﻿using Application.Common;
 using Application.Features.Categories.Commands;
+using Application.Utilities;
 using Domain.Entities;
 using Test.Configurations.IntegrationTest;
 
@@ -29,10 +30,10 @@ public class CreateCategory
     {
         Category category = new()
         {
-            Name = _commandRequest.Name,
+            Name = _commandRequest.Name
         };
 
-        var jsonContent = Utilities.SerializeToJsonContent(category);
+        var jsonContent = CustomJsonFormat.SerializeToJsonContent(category);
 
         var response = await _configurations.Client.PostAsync(EndPointConstants.CATEGORY, jsonContent);
 

@@ -15,7 +15,8 @@ public class CreateProductCommandRequest : IRequest
     [Range(1, 1_000_000_000, ErrorMessage = "Price must between 1 and 1 billion")]
     public decimal Price { get; init; }
 
-    public Guid? CategoryId { get; }
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
+    public Guid? CategoryId { get; set; }
 }
 
 public class CreateProductCommandRequestHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateProductCommandRequest>
@@ -23,8 +24,8 @@ public class CreateProductCommandRequestHandler(IUnitOfWork unitOfWork) : IReque
     public async Task Handle(CreateProductCommandRequest request, CancellationToken cancellationToken)
     {
         var categoryId = request.CategoryId == Guid.Empty ? null : request.CategoryId;
-            
-            
+
+
         Product product = new()
         {
             Name = request.Name,

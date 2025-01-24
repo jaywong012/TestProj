@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Application.Utilities;
 using MediatR;
 using Domain.Interfaces;
 using Domain.ErrorHandlingManagement;
@@ -28,7 +29,7 @@ public class GetCategoryByIdQueryHandler(IUnitOfWork unitOfWork)
         {
             Id = existCategory.Id,
             Name = existCategory.Name,
-            LastSavedTime = existCategory.LastSavedTime
+            LastSavedTime = FormatDateTime.HH_mm_MMM_dd(existCategory.LastSavedTime)
         };
         return category;
     }
@@ -37,10 +38,11 @@ public class GetCategoryByIdQueryHandler(IUnitOfWork unitOfWork)
 public class GetCategoryQueryResponse
 {
     [JsonPropertyName("id")]
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
     [JsonPropertyName("name")]
     public required string Name { get; set; }
+
     [JsonPropertyName("lastSavedTime")]
-    public DateTime? LastSavedTime { get; init; }
+    public string? LastSavedTime { get; init; }
 }

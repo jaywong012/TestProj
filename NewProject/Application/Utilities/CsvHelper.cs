@@ -7,15 +7,18 @@ public static class CsvHelper
 {
     public static string GenerateCsv<T>(IEnumerable<T> items)
     {
-        if (items == null || !items.Any()) return string.Empty;
-
         var csvBuilder = new StringBuilder();
-        var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        var properties = GetPublicInstanceProperties<T>();
 
         AppendHeader(csvBuilder, properties);
         AppendRows(csvBuilder, properties, items);
 
         return csvBuilder.ToString();
+    }
+
+    private static PropertyInfo[] GetPublicInstanceProperties<T>()
+    {
+        return typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
     }
 
     private static void AppendHeader(StringBuilder csvBuilder, PropertyInfo[] properties)

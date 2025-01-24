@@ -13,9 +13,9 @@ namespace Application.Features.Logins.Commands;
 
 public class GenerateJwtTokenCommandRequest : IRequest<string>
 {
-    public required string UserName { get; set; }
+    public required string UserName { get; init; }
 
-    public required string Password { get; set; }
+    public required string Password { get; init; }
 }
 
 public class GenerateJwtTokenCommandRequestHandler(
