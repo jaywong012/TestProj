@@ -17,7 +17,7 @@ public class RegisterAccount
         _request = new RegisterAccountCommandRequest
         {
             Password = "Test123",
-            Role = Constants.ADMIN,
+            Role = CommonConstants.ADMIN,
             UserName = "Test"
         };
     }
@@ -30,7 +30,7 @@ public class RegisterAccount
 
 
     [Test]
-    public async Task Test()
+    public async Task RegisterAccount_HaveSpecificAccount_ReturnSuccess()
     {
         var jsonContent = CustomJsonFormat.SerializeToJsonContent(_request);
         var result = await _configurationsModel.Client.PostAsync(EndPointConstants.ACCOUNT, jsonContent);

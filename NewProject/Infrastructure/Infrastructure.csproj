@@ -28,4 +28,14 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Scripts\Commands\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Scripts\Commands\Set_Index_For_Product_Name.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

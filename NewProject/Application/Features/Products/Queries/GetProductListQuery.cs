@@ -52,13 +52,13 @@ public class GetProductQueryResponse
     public Guid? CategoryId { get; set; }
 
     [JsonPropertyName("lastSavedTime")]
-    public string? LastSavedTime { get; init; }
+    public string? LastSavedTime { get; set; }
 
     [JsonPropertyName("createdTime")]
     public DateTime? CreatedTime { get; init; }
 
     [JsonPropertyName("categoryName")]
-    public string? CategoryName { get; init; }
+    public string? CategoryName { get; set; }
 
     [JsonPropertyName("price")]
     public int Price { get; set; }

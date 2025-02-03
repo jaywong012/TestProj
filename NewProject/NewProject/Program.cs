@@ -21,8 +21,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddRateLimiterConfiguration();
 builder.Services.AddAuthenticateConfiguration(builder.Configuration);
 builder.Services.AddAuthorizationBuilder()
-    .AddPolicy("AdminPolicy", policy => policy.RequireRole(Constants.ADMIN))
-    .AddPolicy("UserPolicy", policy => policy.RequireRole(Constants.USER));
+    .AddPolicy("AdminPolicy", policy => policy.RequireRole(CommonConstants.ADMIN))
+    .AddPolicy("UserPolicy", policy => policy.RequireRole(CommonConstants.USER));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

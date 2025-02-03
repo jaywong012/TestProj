@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Threading.RateLimiting;
+using Application.Common;
 using Domain.Interfaces;
 using Domain.Interfaces.IRepositories;
 using Infrastructure.Configurations;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
+
 namespace Infrastructure;
 
 public static class DependencyInjection
@@ -21,16 +23,16 @@ public static class DependencyInjection
     {
         services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+            c.SwaggerDoc(CommonConstants.API_V1, new OpenApiInfo { Title = "My API", Version = CommonConstants.API_V1 });
 
-            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            c.AddSecurityDefinition(CommonConstants.BEARER, new OpenApiSecurityScheme
             {
                 In = ParameterLocation.Header,
                 Description = configuration["JwtSettings:Key"],
-                Name = "Authorization",
+                Name = CommonConstants.AUTHORIZATION,
                 Type = SecuritySchemeType.ApiKey,
                 BearerFormat = "JWT",
-                Scheme = "Bearer"
+                Scheme = CommonConstants.BEARER
             });
 
             // Set the security requirements
@@ -42,7 +44,7 @@ public static class DependencyInjection
                         Reference = new OpenApiReference
                         {
                             Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
+                            Id = CommonConstants.BEARER
                         }
                     },
                     Array.Empty<string>()
@@ -70,7 +72,7 @@ public static class DependencyInjection
     {
         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
         
-        if (environment != "Test")
+        if (environment != CommonConstants.TEST_ENVIRONMENT)
         {
             services.AddDbContext<NewProjectDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));

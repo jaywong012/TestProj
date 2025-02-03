@@ -1,4 +1,5 @@
 ﻿using Application.Utilities;
+using Domain.Entities;
 using MediatR;
 using Domain.ErrorHandlingManagement;
 using Domain.Interfaces;
@@ -21,15 +22,10 @@ public class GetProductByIdQueryHandler(IUnitOfWork unitOfWork)
             throw new ItemNotFoundException($"Product with ID {query.Id} not found");
         }
 
-        GetProductQueryResponse result = new()
-        {
-            Id = product.Id,
-            CategoryName = product.Category?.Name,
-            CategoryId = product.CategoryId,
-            Name = product.Name,
-            LastSavedTime = FormatDateTime.HH_mm_MMM_dd(product.LastSavedTime),
-            Price = (int)product.Price
-        };
+        var mappingProfile = new MappingProfile<Product, GetProductQueryResponse>();
+        var result = mappingProfile.Map(product);
+        result.LastSavedTime = FormatDateTime.HH_mm_MMM_dd(product.LastSavedTime);
+        result.CategoryName = product.Category?.Name;
 
         return result;
     }
