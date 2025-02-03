@@ -31,4 +31,13 @@ public class GenerateJwtToken
         var loginResponse = await _configurations.Client.PostAsync(EndPointConstants.LOGIN, jsonContent);
         Assert.That(loginResponse.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));
     }
+
+    [Test]
+    public async Task GenerateJwtToken_IncorrectUserName_ReturnErrorMessage()
+    {
+        _request.UserName = "juno";
+        var jsonContent = CustomJsonFormat.SerializeToJsonContent(_request);
+        var loginResponse = await _configurations.Client.PostAsync(EndPointConstants.LOGIN, jsonContent);
+        Assert.That(loginResponse.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+    }
 }

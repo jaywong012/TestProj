@@ -1,11 +1,13 @@
-﻿using Domain.Entities;
+﻿using Application.Features.Products.Commands;
+using Domain.Entities;
 using Domain.Interfaces;
+using Domain.Interfaces.IRepositories;
 using Moq;
 using Test.Configurations.UnitTest;
 
 namespace Test.UnitTest.Products.Commands;
 
-public class AddProduct
+public class CreateProduct
 {
     private List<Product> _mockProducts;
     private Mock<IUnitOfWork> _mockUnitOfWork;
@@ -18,7 +20,7 @@ public class AddProduct
     }
 
     [Test]
-    public async Task UpdateProduct_UpdateAllProductFields_AllFieldsUpdated()
+    public async Task CreateProduct_InsertAllProductFields_ProductCreated()
     {
         const string addName = "Strong Bow";
         const decimal addPrice = 100;

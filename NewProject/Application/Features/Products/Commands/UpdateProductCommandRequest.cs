@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Domain.Interfaces;
 using Application.Features.Products.Queries;
+using Application.Utilities;
 
 namespace Application.Features.Products.Commands;
 
@@ -30,13 +31,10 @@ public class UpdateProductCommandRequestHandler(IUnitOfWork unitOfWork, IMediato
 
         var categoryId = request.CategoryId == Guid.Empty ? null : request.CategoryId;
 
-        Product product = new()
-        {
-            Id = request.Id,
-            Price = request.Price,
-            Name = request.Name,
-            CategoryId = categoryId
-        };
+        var mappingProfile = new MappingProfile<UpdateProductCommandRequest, Product>();
+        var product = mappingProfile.Map(request);
+        product.CategoryId = categoryId;
+
         await unitOfWork.ProductRepository.Update(product);
         return product;
     }

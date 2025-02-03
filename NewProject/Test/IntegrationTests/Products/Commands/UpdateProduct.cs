@@ -88,6 +88,32 @@ public class UpdateProduct
             Assert.That(updatedProduct?.Price, Is.EqualTo(_request.Price));
             Assert.That(updatedProduct?.CategoryId, Is.EqualTo(_request.CategoryId));
         });
+    }
 
+
+
+    [Test]
+    public async Task UpdateProduct_UpdateWithNoCategory_ProductHasBeenUpdated()
+    {
+        SeedDatabase.SeedProducts(_configurations.Context);
+        _request.CategoryId = Guid.Empty;
+
+        var response = await _configurations.Client.GetAsync($"{EndPointConstants.PRODUCT}/{_request.Id}");
+        var responseBody = response.Content.ReadAsStringAsync().Result;
+        var product = JsonSerializer.Deserialize<GetProductQueryResponse>(responseBody);
+        if (product != null)
+        {
+            product.Name = _request.Name;
+            product.Price = (int)_request.Price;
+            product.CategoryId = _request.CategoryId;
+        }
+
+        if (product != null)
+        {
+            var jsonContent = CustomJsonFormat.SerializeToJsonContent(product);
+
+            var putResponse = await _configurations.Client.PutAsync($"{EndPointConstants.PRODUCT}/{_request.Id}", jsonContent);
+            putResponse.EnsureSuccessStatusCode();
+        }
     }
 }

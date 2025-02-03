@@ -12,5 +12,5 @@
 TestResults
 coverage-report/
 coverage/
-*.user
+*csproj.user
 *.tmp

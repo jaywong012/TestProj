@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Application.Utilities;
 using MediatR;
 using Domain.Entities;
 using Domain.Interfaces;
@@ -23,15 +24,10 @@ public class CreateProductCommandRequestHandler(IUnitOfWork unitOfWork) : IReque
 {
     public async Task Handle(CreateProductCommandRequest request, CancellationToken cancellationToken)
     {
-        var categoryId = request.CategoryId == Guid.Empty ? null : request.CategoryId;
+        var mappingProfile = new MappingProfile<CreateProductCommandRequest, Product>();
+        var product = mappingProfile.Map(request);
+        product.CategoryId = request.CategoryId == Guid.Empty ? null : request.CategoryId;
 
-
-        Product product = new()
-        {
-            Name = request.Name,
-            Price = request.Price, 
-            CategoryId = categoryId
-        };
         await unitOfWork.ProductRepository.Add(product);
     }
 }

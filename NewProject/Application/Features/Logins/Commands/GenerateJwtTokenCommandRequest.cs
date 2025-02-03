@@ -13,7 +13,7 @@ namespace Application.Features.Logins.Commands;
 
 public class GenerateJwtTokenCommandRequest : IRequest<string>
 {
-    public required string UserName { get; init; }
+    public required string UserName { get; set; }
 
     public required string Password { get; init; }
 }
@@ -42,7 +42,7 @@ public class GenerateJwtTokenCommandRequestHandler(
         {
             Subject = new ClaimsIdentity([
                 new Claim(ClaimTypes.Name, request.UserName),
-                new Claim(ClaimTypes.Role, Constants.ADMIN)
+                new Claim(ClaimTypes.Role, CommonConstants.ADMIN)
             ]),
             Expires = DateTime.UtcNow.AddYears(1),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(encodeKey),

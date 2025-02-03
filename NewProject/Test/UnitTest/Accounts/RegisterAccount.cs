@@ -18,7 +18,7 @@ public class RegisterAccount
         _request = new RegisterAccountCommandRequest
         {
             Password = "Test123",
-            Role = Constants.ADMIN,
+            Role = CommonConstants.ADMIN,
             UserName = "Test"
         };
         _unitOfWork = new Mock<IUnitOfWork>();
