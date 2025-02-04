@@ -40,4 +40,64 @@ describe("PaginationComponent", () => {
 
     expect(screen.getAllByText("…")).toHaveLength(2);
   });
+
+  test('handles left ellipsis click correctly', async () => {
+    const onPageChange = jest.fn();
+    render(
+      <PaginationComponent currentPage={4} totalPages={10} onPageChange={onPageChange} />
+    );
+
+    const ellipsisItems = screen.getAllByText('…');
+    expect(ellipsisItems).toHaveLength(2);
+
+    fireEvent.click(ellipsisItems[0]);
+    expect(onPageChange).toHaveBeenCalledWith(2);
+  });
+
+  test('handles right ellipsis click correctly', async () => {
+    const onPageChange = jest.fn();
+
+    render(
+      <PaginationComponent currentPage={4} totalPages={10} onPageChange={onPageChange} />
+    )
+
+    const ellipsisItems = screen.getAllByText('…');
+    expect(ellipsisItems).toHaveLength(2);
+
+    fireEvent.click(ellipsisItems[1]);
+    expect(onPageChange).toHaveBeenCalledWith(7);
+  });
+
+  test('test startPage and endPage equal to 1 and totalPages respectively', () => {
+    const onPageChange = jest.fn();
+
+    render(
+      <PaginationComponent currentPage={10} totalPages={10} onPageChange={onPageChange} />
+    );
+    
+    expect(screen.getByText("1")).toBeInTheDocument();
+  });
+
+  test('test click to first page', async () => {
+    const onPageChange = jest.fn();
+
+    render(
+      <PaginationComponent currentPage={10} totalPages={10} onPageChange={onPageChange} />
+    );
+    
+    fireEvent.click(screen.getByText("1"));
+    expect(onPageChange).toHaveBeenCalledWith(1);
+  });
+
+  test('test click to total page', async () => {
+    const onPageChange = jest.fn();
+
+    render(
+      <PaginationComponent currentPage={1} totalPages={10} onPageChange={onPageChange} />
+    );
+    
+    fireEvent.click(screen.getByText("10"));
+    expect(onPageChange).toHaveBeenCalledWith(10);
+  });
+
 });

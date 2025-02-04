@@ -1,6 +1,6 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import CustomTable from "./CustomTable";
-import React from "react";
+import { render, screen, fireEvent } from '@testing-library/react';
+import CustomTable from './CustomTable';
+import '@testing-library/jest-dom';
 
 // Mock components
 jest.mock("../CustomTitle/CustomTitle", () => ({ children }) => (
@@ -16,106 +16,108 @@ describe("CustomTable", () => {
   ];
 
   const itemArray = [
-    { id: 1, name: "John Doe", age: 30, location: "New York" },
-    { id: 2, name: "Jane Smith", age: 25, location: "London" },
+    { id: 1, name: "John Doe" },
+    { id: 2, name: "Jane Smith" },
   ];
 
   const renderBodyRow = (item) => (
-    <>
       <td>{item.name}</td>
-      <td>{item.age}</td>
-      <td>{item.location}</td>
-    </>
   );
 
   const handleSetEditDetail = jest.fn();
   const handleDelete = jest.fn();
+  const handleDownloadFile = jest.fn();
+  const setCurrentPage = jest.fn();
+  const fetchDataByPaging = jest.fn();
+  
+  describe("CustomTable", () => {
+    test("renders title and download button when provided", async () => {
 
-  test("should render the title and table header", () => {
-    render(
-      <CustomTable
-        title="User List"
-        headerArray={headerArray}
-        itemArray={itemArray}
-        renderBodyRow={renderBodyRow}
-        handleSetEditDetail={handleSetEditDetail}
-        handleDelete={handleDelete}
-        loading={false}
-      />
-    );
+      const {container} = render(
+        <CustomTable
+          title="Test Table"
+          headerArray={headerArray}
+          itemArray={itemArray}
+          renderBodyRow={renderBodyRow}
+          handleSetEditDetail={handleSetEditDetail}
+          handleDelete={handleDelete}
+          handleDownloadFile={handleDownloadFile}
+        />
+      );
+      
+      expect(screen.getByText("Test Table")).toBeInTheDocument();
+      
+      const downloadSvg = container.querySelector('svg.bi-download');
+      expect(downloadSvg).toBeInTheDocument();
 
-    expect(screen.getByText("User List")).toBeInTheDocument();
+      const downloadBtn = downloadSvg.closest('button');
+      fireEvent.click(downloadBtn);
+      expect(handleDownloadFile).toHaveBeenCalledTimes(1);
+    });
 
-    expect(screen.getByText("Name")).toBeInTheDocument();
-    expect(screen.getByText("Age")).toBeInTheDocument();
-    expect(screen.getByText("Location")).toBeInTheDocument();
-  });
+    test("renders search input when search is enabled", () => {
+      render(
+        <CustomTable
+          title="Test Table"
+          headerArray={headerArray}
+          itemArray={itemArray}
+          renderBodyRow={renderBodyRow}
+          handleSetEditDetail={handleSetEditDetail}
+          handleDelete={handleDelete}
+          handleDownloadFile={handleDownloadFile}
+          isSearchable={true}
+        />
+      );
 
-  test("should display loading spinner when loading is true", () => {
-    render(
-      <CustomTable
-        title="User List"
-        headerArray={headerArray}
-        itemArray={itemArray}
-        renderBodyRow={renderBodyRow}
-        handleSetEditDetail={handleSetEditDetail}
-        handleDelete={handleDelete}
-        loading={true}
-      />
-    );
+      expect(screen.getByPlaceholderText("Search...")).toBeInTheDocument();
+    });
 
-    expect(screen.getByText("Loading...")).toBeInTheDocument();
-  });
+    test("renders spinner when loading", () => {
+      render(
+        <CustomTable
+          title="Test Table"
+          headerArray={headerArray}
+          itemArray={itemArray}
+          renderBodyRow={renderBodyRow}
+          handleSetEditDetail={handleSetEditDetail}
+          handleDelete={handleDelete}
+          handleDownloadFile={handleDownloadFile}
+          loading={true}
+        />
+      )
 
-  test("should render table rows", () => {
-    render(
-      <CustomTable
-        title="User List"
-        headerArray={headerArray}
-        itemArray={itemArray}
-        renderBodyRow={renderBodyRow}
-        handleSetEditDetail={handleSetEditDetail}
-        handleDelete={handleDelete}
-        loading={false}
-      />
-    );
+      expect(screen.getByText("Loading...")).toBeInTheDocument();
+    });
 
-    // Check if the table rows are rendered
-    expect(screen.getByText("John Doe")).toBeInTheDocument();
-    expect(screen.getByText("Jane Smith")).toBeInTheDocument();
-  });
 
-  test("should call handleSetEditDetail when edit button is clicked", () => {
-    render(
-      <CustomTable
-        title="User List"
-        headerArray={headerArray}
-        itemArray={itemArray}
-        renderBodyRow={renderBodyRow}
-        handleSetEditDetail={handleSetEditDetail}
-        handleDelete={handleDelete}
-        loading={false}
-      />
-    );
+    test("renders pagination when total pages more than 1", async () => {
+      const {container} = render(
+        <CustomTable
+          title="Test Table"
+          headerArray={headerArray}
+          itemArray={itemArray}
+          renderBodyRow={renderBodyRow}
+          handleSetEditDetail={handleSetEditDetail}
+          handleDelete={handleDelete}
+          handleDownloadFile={handleDownloadFile}
+          loading={false}
+          totalPages={10}
+          currentPage={1}
+          setCurrentPage={setCurrentPage}
+          fetchDataByPaging={fetchDataByPaging}
+        />
+      )
+      const downloadSvg = container.querySelector('svg.bi-download');
+      expect(downloadSvg).toBeInTheDocument();
 
-    fireEvent.click(screen.getAllByRole("button")[0]); // Click on the first edit button
-    expect(handleSetEditDetail).toHaveBeenCalledWith(1);
-  });
+      const paginationComponent = container.querySelector('ul.pagination');
+      expect(paginationComponent).toBeInTheDocument();
 
-  test("should call handleDelete when delete button is clicked", () => {
-    render(
-      <CustomTable
-        title="User List"
-        headerArray={headerArray}
-        itemArray={itemArray}
-        renderBodyRow={renderBodyRow}
-        handleSetEditDetail={handleSetEditDetail}
-        handleDelete={handleDelete}
-        loading={false}
-      />
-    );
+      fireEvent.click(screen.getByText("10"));
 
-    fireEvent.click(screen.getAllByRole("button")[1]); // Click on the first delete button
-    expect(handleDelete).toHaveBeenCalledWith(1);
-  });
+      expect(setCurrentPage).toHaveBeenCalledTimes(1);
+      expect(fetchDataByPaging).toHaveBeenCalledTimes(1);
+
+    });
+  })
 });

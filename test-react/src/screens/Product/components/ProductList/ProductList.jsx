@@ -5,18 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { pageSize } from "@/constants/common";
 import {
   setCurrentPage,
+  setEditDetail,
   setPages,
   setProducts,
   setSearchKey,
 } from "@/features/redux/slicers/productSlice";
 import productApiServices from "@/features/apis/products/products";
 
-const ProductList = ({
-  loading,
-  products,
-  handleSetEditDetail,
-  handleDelete,
-}) => {
+const ProductList = ({ loading, products, handleDelete }) => {
   const header = useMemo(
     () => [
       { name: "Name", width: "30%" },
@@ -83,6 +79,18 @@ const ProductList = ({
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const handleSetEditDetail = (id) => {
+    const product = products.find((product) => product.id === id);
+    const editDetail = {
+      id: id,
+      name: product.name,
+      price: product.price,
+      categoryId: product.categoryId ?? "",
+      categoryName: product.categoryName ?? "",
+    }
+    dispatch(setEditDetail(editDetail));
   };
 
   return (
