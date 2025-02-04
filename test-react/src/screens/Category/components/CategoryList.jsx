@@ -1,13 +1,10 @@
-import React, { useMemo } from "react";
-import PropTypes from "prop-types";
+import React, { useEffect, useMemo, useState } from "react";
 import CustomTable from "@/components/CustomTable/CustomTable";
+import { setCategories, setEditDetail } from "@/features/redux/slicers/categorySlice";
+import { useDispatch, useSelector } from "react-redux";
+import categoryApiServices from "@/features/apis/categories/categories";
 
-const CategoryList = ({
-  categories,
-  handleSetEditDetail,
-  handleDelete,
-  loading,
-}) => {
+const CategoryList = () => {
   const header = useMemo(
     () => [
       { name: "Name", width: "60%" },
@@ -15,6 +12,36 @@ const CategoryList = ({
     ],
     []
   );
+
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
+  const categories = useSelector((state) => state.category.categories);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const result = await categoryApiServices.getAll();
+        dispatch(setCategories(result));
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  const handleSetEditDetail = (id) => {
+    const category = categories.find((category) => category.id === id);
+    dispatch(setEditDetail({ id: category.id, name: category.name }));
+  };
+  
+  const handleDelete = async (id) => {
+    await categoryApiServices.deleteCategory(id);
+    const result = await categoryApiServices.getAll();
+    dispatch(setCategories(result));
+  };
+
   const renderCategory = (category) => {
     return (
       <>
@@ -36,15 +63,6 @@ const CategoryList = ({
       loading={loading}
     />
   );
-};
-
-CategoryList.propTypes = {
-  categories: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-    })
-  ).isRequired,
 };
 
 export default CategoryList;
