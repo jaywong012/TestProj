@@ -89,7 +89,7 @@ const ProductList = ({ loading, products, handleDelete }) => {
       price: product.price,
       categoryId: product.categoryId ?? "",
       categoryName: product.categoryName ?? "",
-    }
+    };
     dispatch(setEditDetail(editDetail));
   };
 

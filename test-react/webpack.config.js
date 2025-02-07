@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const fs = require('fs');
 
 module.exports = {
   entry: './src/index.js',
@@ -25,7 +26,7 @@ module.exports = {
     ],
   },
   resolve: {
-    alias:{
+    alias: {
       '@': path.resolve(__dirname, 'src/'),
     },
     extensions: ['.js', '.jsx'],
@@ -36,7 +37,12 @@ module.exports = {
     }),
   ],
   devServer: {
-    static: './dist',
+    static: path.resolve(__dirname, 'dist'),
     historyApiFallback: true,
+    // host: 'localhost',
+    // port: 3000, // Change the port if needed
+    // server: {
+    //   type: 'https', // ✅ This enables HTTPS
+    // },
   },
 };

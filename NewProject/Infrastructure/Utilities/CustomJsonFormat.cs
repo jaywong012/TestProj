@@ -1,8 +1,8 @@
 ﻿using System.Text;
 using System.Text.Json;
-using Application.Common;
+using Domain.Common.Constants;
 
-namespace Application.Utilities;
+namespace Infrastructure.Utilities;
 
 public static class CustomJsonFormat
 {

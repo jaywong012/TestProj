@@ -19,13 +19,21 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
 
             switch (ex)
             {
-                case ItemNotFoundException:
+                case ItemNotFoundException itemNotFoundEx:
                     httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-                    await httpContext.Response.WriteAsync("Resource not found");
+                    await httpContext.Response.WriteAsync(itemNotFoundEx.Message);
                     break;
-                case UnAuthorizeException:
+                case UnAuthorizeException unAuthorizeExceptionEx:
                     httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                    await httpContext.Response.WriteAsync("Unable to authorize your account");
+                    await httpContext.Response.WriteAsync(unAuthorizeExceptionEx.Message);
+                    break;
+                case TooManyRequestException tooManyRequestEx:
+                    httpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+                    await httpContext.Response.WriteAsync(tooManyRequestEx.Message);
+                    break;
+                case VerifyActionFailedException verifyActionEx:
+                    httpContext.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
+                    await httpContext.Response.WriteAsync(verifyActionEx.Message);
                     break;
                 case InvalidOperationException:
                     httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;

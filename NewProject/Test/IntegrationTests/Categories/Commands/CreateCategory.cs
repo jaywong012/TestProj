@@ -1,7 +1,7 @@
-﻿using Application.Common;
-using Application.Features.Categories.Commands;
-using Application.Utilities;
+﻿using Application.Features.Categories.Commands;
+using Domain.Common.Constants;
 using Domain.Entities;
+using Infrastructure.Utilities;
 using Test.Configurations.IntegrationTest;
 
 namespace Test.IntegrationTests.Categories.Commands;

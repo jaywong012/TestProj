@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using System.Threading.RateLimiting;
-using Application.Common;
+using Domain.Common.Constants;
 using Domain.Interfaces;
 using Domain.Interfaces.IRepositories;
 using Infrastructure.Configurations;

@@ -1,7 +1,5 @@
-﻿using Application.Features.Products.Commands;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Interfaces;
-using Domain.Interfaces.IRepositories;
 using Moq;
 using Test.Configurations.UnitTest;
 

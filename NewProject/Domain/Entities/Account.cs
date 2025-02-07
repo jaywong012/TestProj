@@ -13,4 +13,8 @@ public class Account : BaseModel
 
     [MaxLength(20)]
     public required string Role { get; init; }
+
+    public ICollection<AccountPostShare>? AccountPostShares { get; init; }
+
+    public ICollection<SocialAccessInfo>? AccessTokens { get; init; }
 }

@@ -1,10 +1,10 @@
 ﻿using System.Net;
 using System.Text.Json;
-using Application.Common;
 using Application.Features.Products.Commands;
 using Application.Features.Products.Queries;
-using Application.Utilities;
+using Domain.Common.Constants;
 using Domain.Entities;
+using Infrastructure.Utilities;
 using Test.Configurations.IntegrationTest;
 
 namespace Test.IntegrationTests.Products.Commands;

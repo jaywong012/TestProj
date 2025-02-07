@@ -1,6 +1,6 @@
-﻿using Application.Common;
-using Application.Features.Accounts.Commands;
-using Application.Utilities;
+﻿using Application.Features.Accounts.Commands;
+using Domain.Common.Constants;
+using Infrastructure.Utilities;
 using Test.Configurations.IntegrationTest;
 
 namespace Test.IntegrationTests.Accounts.Commands;

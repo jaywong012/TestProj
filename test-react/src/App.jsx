@@ -3,25 +3,17 @@ import Footer from "@/screens/Footer";
 import Product from "@/screens/Product/Product";
 import Category from "@/screens/Category/Category";
 import MyNavbar from "@/screens/Nav";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./screens/Login/Login";
 import PrivateRoute from "./components/RouteConfigurations/PrivateRoute";
+import Post from "./screens/Post/Post";
 
 const App = () => {
   return (
     <Router>
       <MyNavbar />
       <Routes>
-        <Route
-          path="/login"
-          element={
-            <Login />
-          }
-        />
+        <Route path="/login" element={<Login />} />
         <Route
           path="/"
           element={
@@ -35,6 +27,14 @@ const App = () => {
           element={
             <PrivateRoute>
               <Category />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/post"
+          element={
+            <PrivateRoute>
+              <Post />
             </PrivateRoute>
           }
         />

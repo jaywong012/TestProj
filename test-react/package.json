@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start-script": "react-scripts start",
-    "start": "webpack serve --mode development",
+    "start": "webpack serve --mode development --open",
     "build": "webpack --mode production",
     "test": "jest --coverage"
   },
@@ -16,6 +16,7 @@
     "@reduxjs/toolkit": "^2.5.0",
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
+    "firebase": "^11.2.0",
     "jwt-decode": "^4.0.0",
     "punycode": "^2.3.1",
     "react": "^19.0.0",

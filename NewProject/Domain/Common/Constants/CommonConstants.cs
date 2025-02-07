@@ -1,4 +1,4 @@
-﻿namespace Application.Common;
+﻿namespace Domain.Common.Constants;
 
 public static class CommonConstants
 {

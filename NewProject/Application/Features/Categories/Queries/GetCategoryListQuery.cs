@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Domain.Interfaces;
-using Application.Utilities;
+using Infrastructure.Utilities;
 
 namespace Application.Features.Categories.Queries;
 

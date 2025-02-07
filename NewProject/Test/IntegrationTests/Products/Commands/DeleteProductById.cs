@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
 using System.Net;
-using Application.Common;
+using Domain.Common.Constants;
 using Test.Configurations.IntegrationTest;
 
 namespace Test.IntegrationTests.Products.Commands;

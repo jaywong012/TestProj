@@ -1,8 +1,8 @@
-﻿using Application.Utilities;
-using Domain.Entities;
+﻿using Domain.Entities;
 using MediatR;
 using Domain.ErrorHandlingManagement;
 using Domain.Interfaces;
+using Infrastructure.Utilities;
 
 namespace Application.Features.Products.Queries;
 
