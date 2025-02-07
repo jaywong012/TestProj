@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
-using Application.Common;
 using Application.Features.Products.Queries;
+using Domain.Common.Constants;
 using Domain.Entities;
 using Test.Configurations.IntegrationTest;
 

@@ -1,4 +1,4 @@
-﻿namespace Application.Utilities;
+﻿namespace Infrastructure.Utilities;
 
 public static class HashPassword
 {

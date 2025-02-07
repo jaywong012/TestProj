@@ -1,6 +1,6 @@
-﻿using Application.Common;
-using Application.Features.Products.Commands;
-using Application.Utilities;
+﻿using Application.Features.Products.Commands;
+using Domain.Common.Constants;
+using Infrastructure.Utilities;
 using Test.Configurations.IntegrationTest;
 
 namespace Test.IntegrationTests.Products.Commands;

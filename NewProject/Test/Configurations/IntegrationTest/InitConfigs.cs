@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http.Headers;
-using Application.Utilities;
+using Infrastructure.Utilities;
 
 namespace Test.Configurations.IntegrationTest;
 

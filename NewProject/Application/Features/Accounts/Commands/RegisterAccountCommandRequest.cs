@@ -1,6 +1,6 @@
-﻿using Application.Utilities;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Interfaces;
+using Infrastructure.Utilities;
 using MediatR;
 
 namespace Application.Features.Accounts.Commands;

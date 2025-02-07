@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
-using Application.Utilities;
 using Domain.Interfaces;
+using Infrastructure.Utilities;
 using MediatR;
 
 namespace Application.Features.Products.Queries;

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace Application.Utilities;
+namespace Infrastructure.Utilities;
 
 public class MappingConfig<TSource, TDestination> : Profile
 {

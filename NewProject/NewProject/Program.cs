@@ -1,8 +1,9 @@
 using Application;
-using Application.Common;
 using Domain.Base;
+using Domain.Common.Constants;
 using Infrastructure;
 using Infrastructure.CustomMiddleware;
+using NewProject.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost",
         p => p
-            .WithOrigins("http://localhost:8080", "http://localhost:3000")
+            .WithOrigins("http://localhost:8080", "http://localhost:3000", "https://localhost:3000")
             .AllowAnyMethod()
             .AllowAnyHeader()
             .WithHeaders("Content-Type"));
@@ -28,15 +29,18 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerConfiguration(builder.Configuration);
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureConfigurations(builder.Configuration);
+builder.Services.AddRegisterServicesDependency();
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+builder.Services.Configure<SocialAccessTokensInfo>(builder.Configuration.GetSection("SocialAccessTokensInfo"));
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
+    app.UseSwagger();   
     app.UseSwaggerUI();
 }
 

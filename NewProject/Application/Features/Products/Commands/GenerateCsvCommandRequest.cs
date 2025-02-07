@@ -1,5 +1,5 @@
 ﻿using Application.Features.Products.Queries;
-using Application.Utilities;
+using Infrastructure.Utilities;
 using MediatR;
 
 namespace Application.Features.Products.Commands;

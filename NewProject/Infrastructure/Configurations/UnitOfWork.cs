@@ -10,6 +10,9 @@ public class UnitOfWork(NewProjectDbContext dbContext) : IUnitOfWork, IDisposabl
     private IProductRepository? _productRepository;
     private ICategoryRepository? _categoryRepository;
     private IAccountRepository? _accountRepository;
+    private IPostRepository? _postRepository;
+    private IAccountPostShareRepository? _accountPostShareRepository;
+    private ISocialAccessInfoRepository? _socialAccessInfoRepository;
 
     public IProductRepository ProductRepository =>
         _productRepository ??= new ProductRepository(_dbContext);
@@ -17,8 +20,17 @@ public class UnitOfWork(NewProjectDbContext dbContext) : IUnitOfWork, IDisposabl
     public ICategoryRepository CategoryRepository =>
         _categoryRepository ??= new CategoryRepository(_dbContext);
 
-    public IAccountRepository AccountRepository => 
+    public IAccountRepository AccountRepository =>
         _accountRepository ??= new AccountRepository(_dbContext);
+
+    public IPostRepository PostRepository =>
+        _postRepository ??= new PostRepository(_dbContext);
+
+    public IAccountPostShareRepository AccountPostShareRepository =>
+        _accountPostShareRepository ??= new AccountPostShareRepository(_dbContext);
+
+    public ISocialAccessInfoRepository SocialAccessInfoRepository =>
+        _socialAccessInfoRepository ??= new SocialAccessInfoRepository(_dbContext);
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

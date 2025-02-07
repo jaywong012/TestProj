@@ -2,7 +2,7 @@
 using Domain.Entities;
 using Domain.Interfaces;
 using Application.Features.Products.Queries;
-using Application.Utilities;
+using Infrastructure.Utilities;
 
 namespace Application.Features.Products.Commands;
 

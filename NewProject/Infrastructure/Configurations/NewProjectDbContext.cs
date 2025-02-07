@@ -24,6 +24,12 @@ public sealed class NewProjectDbContext : DbContext
 
     public DbSet<Account>? Accounts { get; set; }
 
+    public DbSet<Post>? Posts { get; set; }
+
+    public DbSet<AccountPostShare>? AccountPostShares { get; set; }
+
+    public DbSet<SocialAccessInfo>? SocialAccessInfos { get; set; }
+
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
     {
         foreach (var entry in ChangeTracker.Entries<BaseModel>())
@@ -36,8 +42,6 @@ public sealed class NewProjectDbContext : DbContext
                     entry.CurrentValues["IsDeleted"] = false;
                     break;
                 case EntityState.Modified:
-                    entry.Entity.LastSavedTime = DateTime.UtcNow;
-                    break;
                 case EntityState.Deleted:
                     entry.Entity.LastSavedTime = DateTime.UtcNow;
                     break;

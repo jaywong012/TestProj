@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Text;
 
-namespace Application.Utilities;
+namespace Infrastructure.Utilities;
 
 public static class CsvHelper
 {

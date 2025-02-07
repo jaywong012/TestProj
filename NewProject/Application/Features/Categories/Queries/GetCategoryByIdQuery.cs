@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
-using Application.Utilities;
 using MediatR;
 using Domain.Interfaces;
 using Domain.ErrorHandlingManagement;
+using Infrastructure.Utilities;
 
 namespace Application.Features.Categories.Queries;
 

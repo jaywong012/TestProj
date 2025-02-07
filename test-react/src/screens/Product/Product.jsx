@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, {  useEffect } from "react";
 import ProductList from "./components/ProductList/ProductList";
 import AddEditProduct from "./components/AddEditProduct";
 import productApiServices from "@/features/apis/products/products";
@@ -64,7 +64,7 @@ const Product = () => {
   return (
     <Container fluid>
       <Container>
-        <AddEditProduct getProducts={getProducts}/>
+        <AddEditProduct getProducts={getProducts} />
         <ProductList
           products={products}
           handleDelete={handleDelete}

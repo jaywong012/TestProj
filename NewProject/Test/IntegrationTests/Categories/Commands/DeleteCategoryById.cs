@@ -1,6 +1,6 @@
 ﻿using System.Net;
-using Application.Common;
 using Application.Features.Categories.Commands;
+using Domain.Common.Constants;
 using Test.Configurations.IntegrationTest;
 
 namespace Test.IntegrationTests.Categories.Commands;

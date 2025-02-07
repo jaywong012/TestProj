@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "react-bootstrap";
 import "./CustomButton.scss";
 
-const CustomButton = ({ action, type, onClick, style }) => {
+const CustomButton = ({ action, type, onClick, style, disabled }) => {
   const variants = {
     ADD: "primary",
     EDIT: "primary",
@@ -29,6 +29,7 @@ const CustomButton = ({ action, type, onClick, style }) => {
       variant={variant}
       type={type}
       onClick={onClick}
+      disabled={disabled}
     >
       {text}
     </Button>

@@ -11,4 +11,4 @@ public static class DependencyInjection
         // services.AddTransient(typeof(MappingProfile<,>));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
     }
-}
+}   

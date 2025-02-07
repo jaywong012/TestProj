@@ -25,6 +25,9 @@ const MyNavbar = () => {
             <Nav.Link as={Link} to="/category">
               Category
             </Nav.Link>
+            <Nav.Link as={Link} to="/post">
+              Post
+            </Nav.Link>
           </Nav>
           {localStorage.getItem("token") && (
             <Nav>

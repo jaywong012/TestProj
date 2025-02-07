@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Application.Utilities;
 using MediatR;
 using Domain.Entities;
 using Domain.Interfaces;
+using Infrastructure.Utilities;
 
 namespace Application.Features.Products.Commands;
 
@@ -16,7 +16,6 @@ public class CreateProductCommandRequest : IRequest
     [Range(1, 1_000_000_000, ErrorMessage = "Price must between 1 and 1 billion")]
     public decimal Price { get; init; }
 
-    // ReSharper disable once UnusedAutoPropertyAccessor.Global
     public Guid? CategoryId { get; set; }
 }
 

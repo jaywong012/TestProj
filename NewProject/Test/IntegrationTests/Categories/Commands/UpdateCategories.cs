@@ -1,8 +1,8 @@
 ﻿using System.Net;
 using System.Text.Json;
-using Application.Common;
 using Application.Features.Categories.Queries;
-using Application.Utilities;
+using Domain.Common.Constants;
+using Infrastructure.Utilities;
 using Test.Configurations.IntegrationTest;
 
 namespace Test.IntegrationTests.Categories.Commands;

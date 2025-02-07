@@ -1,7 +1,7 @@
 ﻿using System.Net;
-using Application.Common;
 using Application.Features.Logins.Commands;
-using Application.Utilities;
+using Domain.Common.Constants;
+using Infrastructure.Utilities;
 using Test.Configurations.IntegrationTest;
 
 namespace Test.IntegrationTests.Logins;

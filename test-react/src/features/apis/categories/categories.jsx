@@ -1,5 +1,5 @@
 import endPoint from "@/constants/endPoint";
-import api from "../config";
+import api from "../apiConfig";
 
 const categoryApiServices = {
   getAll: async () => {

@@ -2,8 +2,8 @@
 using System.Security.Claims;
 using System.Text;
 using Application.Features.Accounts.Commands;
-using Application.Common;
 using Domain.Base;
+using Domain.Common.Constants;
 using Domain.ErrorHandlingManagement;
 using MediatR;
 using Microsoft.Extensions.Options;
@@ -41,6 +41,7 @@ public class GenerateJwtTokenCommandRequestHandler(
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity([
+                new Claim("UserId", user.Id.ToString()),
                 new Claim(ClaimTypes.Name, request.UserName),
                 new Claim(ClaimTypes.Role, CommonConstants.ADMIN)
             ]),

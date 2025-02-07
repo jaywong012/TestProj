@@ -1,4 +1,4 @@
-﻿using Application.Common;
+﻿using Domain.Common.Constants;
 using Domain.Entities;
 using Infrastructure.Configurations;
 

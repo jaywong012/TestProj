@@ -10,6 +10,12 @@ public interface IUnitOfWork
 
     IAccountRepository AccountRepository { get; }
 
+    IPostRepository PostRepository { get; }
+
+    IAccountPostShareRepository AccountPostShareRepository { get; }
+
+    ISocialAccessInfoRepository SocialAccessInfoRepository { get; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
 }

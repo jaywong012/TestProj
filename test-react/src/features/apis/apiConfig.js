@@ -1,5 +1,8 @@
 import axios from "axios";
 import apiUrls from "./apiUrls";
+import { useDispatch } from "react-redux";
+import store from "../redux/store/store";
+import { setErrorMessage } from "../redux/slicers/errorMessageSlice";
 
 const apiUrl = apiUrls.local;
 
@@ -19,7 +22,18 @@ axiosInstance.interceptors.request.use(
   error => {
     return Promise.reject(new Error(error));
   }
-)
+);
+
+
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const errorMessage =
+      error?.response?.data || "An unexpected error occurred";
+
+    store.dispatch(setErrorMessage(errorMessage));
+  }
+);
 
 const api = {
   get: async (endPoint) => {
