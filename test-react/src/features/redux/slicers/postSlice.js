@@ -16,6 +16,7 @@ const postSlice = createSlice({
     searchKey: "",
     editDetail: defaultPost,
     loading: false,
+    isVerifyBtnDisabled: false
   },
   reducers: {
     setPosts: (state, action) => {
@@ -39,8 +40,11 @@ const postSlice = createSlice({
     setPages: (state, action) => {
         state.totalPages = action.payload;
     },
+    setVerifyBtnDisabled: (state, action) =>{
+      state.isVerifyBtnDisabled = action.payload;
+    }
   },
 });
 
-export const { setPosts, setPages, setCurrentPage, setSearchKey, setEditDetail, setEmptyEditDetail, setLoading } = postSlice.actions;
+export const { setPosts, setPages, setCurrentPage, setSearchKey, setEditDetail, setEmptyEditDetail, setLoading, setVerifyBtnDisabled } = postSlice.actions;
 export default postSlice.reducer;

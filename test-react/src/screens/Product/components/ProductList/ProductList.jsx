@@ -100,7 +100,7 @@ const ProductList = ({ loading, products, handleDelete }) => {
       handleSetEditDetail={handleSetEditDetail}
       itemArray={products}
       renderBodyRow={renderProduct}
-      title={"List Products"}
+      title={"List Productss"}
       loading={loading}
       totalPages={totalPages}
       fetchDataByPaging={fetchDataByPaging}

@@ -24,7 +24,7 @@ const ToastMessage = () => {
           onClose={() => setShow(false)}
           show={show}
           bg={"danger"}
-          delay={2000}
+          delay={3500}
           autohide
         >
           <Toast.Body style={{ color: "white" }}>{errorMessage}</Toast.Body>
