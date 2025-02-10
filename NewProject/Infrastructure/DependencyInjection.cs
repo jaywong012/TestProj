@@ -58,12 +58,12 @@ public static class DependencyInjection
         var isContainerized = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
         if (isContainerized)
         {
-            builder.WebHost.UseKestrel(_ =>
+            builder.WebHost.UseKestrel((options) =>
             {
-                //options.ListenAnyIP(7124, listenOptions =>
-                //{
-                //    listenOptions.UseHttps("/root/.aspnet/https/NewProject.pfx", "Test123");
-                //});
+                options.ListenAnyIP(7124, listenOptions =>
+                {
+                    listenOptions.UseHttps("/root/.aspnet/https/NewProject.pfx", "Test123");
+                });
             });
         }
     }

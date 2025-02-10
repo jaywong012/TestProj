@@ -6,12 +6,13 @@ WORKDIR /src
 
 COPY ["NewProject/NewProject.sln", "./"]
 COPY ["NewProject/NewProject/NewProject.APIs.csproj", "NewProject/"]
+COPY ["NewProject/NewProject.Services/NewProject.Services.csproj", "NewProject.Services/"]
 COPY ["NewProject/Infrastructure/Infrastructure.csproj", "Infrastructure/"]
 COPY ["NewProject/Domain/Domain.csproj", "Domain/"]
 COPY ["NewProject/Application/Application.csproj", "Application/"]
 COPY ["NewProject/Test/Test.csproj", "Test/"]
 
-RUN dotnet restore
+RUN dotnet restore --verbosity detailed
 
 COPY NewProject/ ./
 

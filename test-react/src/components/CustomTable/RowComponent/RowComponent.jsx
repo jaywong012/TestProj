@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { Pencil, Trash } from "react-bootstrap-icons";
 
-const RowComponent = memo(
+const RowComponent = 
   ({ item, renderBodyRow, handleSetEditDetail, handleDelete }) => {
     return (
       <tr>
@@ -20,8 +20,6 @@ const RowComponent = memo(
         )}
       </tr>
     );
-  },
-  (prevProps, nextProps) => prevProps.item === nextProps.item
-);
+  };
 
 export default RowComponent;
