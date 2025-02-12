@@ -1,6 +1,9 @@
 import React from "react";
 import { auth } from "@/config/firebaseConfig";
-import { FacebookAuthProvider, signInWithPopup } from "firebase/auth";
+import { FacebookAuthProvider, signInWithPopup,
+  fetchSignInMethodsForEmail,
+  linkWithCredential,
+  signInWithCredential } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserDetail } from "@/features/redux/slicers/socialAccessInfoSlice.js";
 import { Button, Container } from "react-bootstrap";

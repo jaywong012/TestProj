@@ -2,6 +2,7 @@ import { setErrorMessage } from "@/features/redux/slicers/errorMessageSlice";
 import React, { useEffect, useState } from "react";
 import { Toast, ToastContainer, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import "./ToastMessage.scss"
 
 const ToastMessage = () => {
   const [show, setShow] = useState(false);
@@ -14,18 +15,16 @@ const ToastMessage = () => {
       setTimeout(() => {
         setShow(false);
         dispatch(setErrorMessage("")); // Clear error after closing
-      }, 3000);
+      }, 3500);
     }
   }, [errorMessage, dispatch]);
   return (
     <div className="p-3">
-      <ToastContainer position="top-end" className="p-3">
+      <ToastContainer position="top-end" className="p-3 fixed-toast-container">
         <Toast
           onClose={() => setShow(false)}
           show={show}
           bg={"danger"}
-          delay={3500}
-          autohide
         >
           <Toast.Body style={{ color: "white" }}>{errorMessage}</Toast.Body>
         </Toast>
