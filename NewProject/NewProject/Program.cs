@@ -1,9 +1,12 @@
 using Application;
 using Domain.Base;
 using Domain.Common.Constants;
+using Domain.Interfaces;
 using Infrastructure;
+using Infrastructure.Configurations;
 using Infrastructure.CustomMiddleware;
 using NewProject.Services;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +22,7 @@ builder.Services.AddCors(options =>
             .WithHeaders("Content-Type"));
 });
 
+
 builder.Services.AddRateLimiterConfiguration();
 builder.Services.AddAuthenticateConfiguration(builder.Configuration);
 builder.Services.AddAuthorizationBuilder()
@@ -30,11 +34,21 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerConfiguration(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.RegisterRabbitMqConsumer();
+
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureConfigurations(builder.Configuration);
 builder.Services.AddRegisterServicesDependency();
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 builder.Services.Configure<SocialAccessTokensInfo>(builder.Configuration.GetSection("SocialAccessTokensInfo"));
+
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+{
+    var redisConfiguration = builder.Configuration.GetConnectionString("Redis");
+    return ConnectionMultiplexer.Connect(redisConfiguration);
+});
 
 var app = builder.Build();
 
@@ -54,6 +68,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+builder.Services.AddScoped<ICacheService, RedisCacheService>();
 
 app.MapControllers();
 

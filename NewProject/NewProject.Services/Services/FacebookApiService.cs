@@ -1,19 +1,10 @@
-﻿using Azure.Core;
-using Domain.Entities;
-using Domain.Interfaces;
+﻿using Domain.Interfaces;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using NewProject.Services.Interface;
 using NewProject.Services.Models;
 using Newtonsoft.Json;
-using System;
-using System.Net.Http;
-using Infrastructure.Utilities;
 using Domain.Base;
-using Domain.Common.Enums;
-using Tweetinvi.Core.Events;
-using System.Xml.Linq;
 
 namespace NewProject.Services.Services;
 
