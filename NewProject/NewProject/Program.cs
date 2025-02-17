@@ -36,19 +36,18 @@ builder.Services.AddSwaggerConfiguration(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.RegisterRabbitMqConsumer();
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+{
+    var redisConfiguration = builder.Configuration.GetConnectionString("Redis");
+    return ConnectionMultiplexer.Connect(redisConfiguration);
+});
 
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureConfigurations(builder.Configuration);
 builder.Services.AddRegisterServicesDependency();
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 builder.Services.Configure<SocialAccessTokensInfo>(builder.Configuration.GetSection("SocialAccessTokensInfo"));
-
-
-builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
-{
-    var redisConfiguration = builder.Configuration.GetConnectionString("Redis");
-    return ConnectionMultiplexer.Connect(redisConfiguration);
-});
+builder.Services.AddScoped<IRedisCacheService, RedisCacheService>();
 
 var app = builder.Build();
 
@@ -68,8 +67,6 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-builder.Services.AddScoped<ICacheService, RedisCacheService>();
 
 app.MapControllers();
 
