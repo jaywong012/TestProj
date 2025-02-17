@@ -2,8 +2,6 @@
 using Application.Features.Posts.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using NewProject.Services.Interface;
-using NewProject.Services.Models;
 
 namespace NewProject.APIs.Controllers;
 

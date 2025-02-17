@@ -11,4 +11,8 @@
 		<Copy SourceFiles="$(OutputPath)testhost.deps.json" DestinationFolder="$(ProjectDir)\bin\$(Configuration)\net8.0\" />
 	</Target>
 
+	<ItemGroup>
+	  <PackageReference Include="MassTransit" Version="8.3.6" />
+	</ItemGroup>
+
 </Project>

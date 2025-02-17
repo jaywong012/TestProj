@@ -82,6 +82,7 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IIntegrationEventBus, RabbitMqIntegrationEventBus>();
     }
 
     public static void AddRateLimiterConfiguration(this IServiceCollection services)
