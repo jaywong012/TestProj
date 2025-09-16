@@ -4,7 +4,7 @@ using StackExchange.Redis;
 
 namespace Infrastructure.Configurations;
 
-public class RedisCacheService : ICacheService
+public class RedisCacheService : IRedisCacheService
 {
     private readonly IConnectionMultiplexer _redis;
     public RedisCacheService(IConnectionMultiplexer redis)
