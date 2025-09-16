@@ -50,6 +50,8 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
     return ConnectionMultiplexer.Connect(redisConfiguration);
 });
 
+builder.Services.AddScoped<ICacheService, RedisCacheService>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -68,8 +70,6 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-builder.Services.AddScoped<ICacheService, RedisCacheService>();
 
 app.MapControllers();
 

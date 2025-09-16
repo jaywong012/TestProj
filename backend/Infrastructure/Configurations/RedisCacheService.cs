@@ -1,6 +1,6 @@
-﻿using Domain.Interfaces;
+﻿using System.Text.Json;
+using Domain.Interfaces;
 using StackExchange.Redis;
-using System.Text.Json;
 
 namespace Infrastructure.Configurations;
 
@@ -18,7 +18,8 @@ public class RedisCacheService : ICacheService
         var value = await db.StringGetAsync(key);
         if (value.IsNullOrEmpty)
             return default;
-        return JsonSerializer.Deserialize<T>(value);
+
+        return JsonSerializer.Deserialize<T>(value.ToString()!);
     }
 
     public async Task SetAsync<T>(string key, T value, TimeSpan expiration)
