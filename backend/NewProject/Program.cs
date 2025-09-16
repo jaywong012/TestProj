@@ -49,8 +49,6 @@ builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSet
 builder.Services.Configure<SocialAccessTokensInfo>(builder.Configuration.GetSection("SocialAccessTokensInfo"));
 builder.Services.AddScoped<IRedisCacheService, RedisCacheService>();
 
-builder.Services.AddScoped<ICacheService, RedisCacheService>();
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
